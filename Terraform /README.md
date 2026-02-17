@@ -1,0 +1,38 @@
+# Terraformm Learnings 
+
+**Terraform**: 
+- A tool, an Infrastructure as Code (IaC) tool used to **create, manage, and automate** cloud infrastructure using code instead of manual way of setting things up using GUI of the cloud platform. Mainly used to manage and automate infrastructure. 
+this tool is from By HashiCorp.
+
+As we know it's compatible with all the cloud platforms, which makes it useful in Hybrid cloud cases. 
+
+Terraform lifecycle: terraform init, terraform plan & terraform apply
+
+- `terraform init` - as the name suggest it initalises the project, it _setups the requried terraform environment_ beform creating infrastructure.
+- `terraform plan` - nothing but a _dry run_, reads the _.tf_ configuration and shows the execution plan, it shows what terraform will create, update, or delete.
+- `terraform apply` - this is where the actual _API calls are made_ and the infrastructure wil be **_created_**. Even the **statefile** will be read in this process on which the changes/modifications will be done in the infrastructure.
+Statefile will be further discussed.
+
+**_WRT this Project_** - Terraform needs to create resources on AWS. So, for terraform to make AIP calls we need to authenticate with AWS(user credentials and IAM user credentials), explained in below steps:
+1. Login with IAM user(Create Access key)
+2. Install AWS CLI on the virtual machine
+3. Configure aws using `AWS Configure` with access key and secret access key.
+4. run `ls ~/.aws/c` to find credentials file and confirm the configuration.
+note: This credentilas file has the info of access key and secret access key, when we run terraform plan or terraform apply, the terrafoem will read the credentials file and apply the configuration on AWS
+
+
+**Terraform StateFile**:
+Statefile is the only source of truth terrafoem uses to manage real infrastructure.
+Terrafrom remembers actions and it updates this statefile after each action.
+
+terraform statefile --------(is)--------> the current state of the Ingrastructure.
+
+It only stores the current snapshot of the infrastructure. It acts as terraform's memory, based on which the actions are performed. 
+
+
+
+
+
+
+
+ 
