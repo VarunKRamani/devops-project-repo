@@ -51,6 +51,9 @@ As we store the statefile in remote backend its also important to have set permi
 
 onwards --- >> S3 with dynamoDB table
 
+How to write terraform file in different file. 
+
+
 
 
 
