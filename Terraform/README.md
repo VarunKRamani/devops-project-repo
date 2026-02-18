@@ -29,6 +29,33 @@ terraform statefile --------(is)--------> the current state of the Ingrastructur
 
 It only stores the current snapshot of the infrastructure. It acts as terraform's memory, based on which the actions are performed. 
 
+What it records?  --> It recodrs the infomation like resource details, resource ids, meta data and mapping configuration.
+
+Why it records?  --> without statefile, terraform would have no memeory of what resources were created, terraform knows what exactly has been created, updated or deleted. whithout it terraform would loose the track of the infrastructure and would be impossible to apply changes safely or avoide duplication in future runs.
+
+**Statefile Management**
+
+Terraform statefile management is important, cause statefile it lets terraform keep track of all the real world resources. It ensures that the statefile is updated after each action performed by terraform.
+
+when the terraform runs initally the statefile is created locally. This is fine until when working solo or on personal project. 
+In larger projects where multiple people need to collabrate we would rist loosing statefile in sync. The walkaround is to move the statefile to remote backend.
+
+**Remote Bancked**
+A Storage location where the statefile is stored outside the local machine, so multiple users can share and manage infrastructure safely without any conflit. 
+It centralizes the statefile and enables versioning and backup.
+Ex: AWS S3, terraform cloud etc
+
+As we store the statefile in remote backend its also important to have set permissions or a lock machanism that prevents multiple people or processes from changing the state at the same time.
+
+
+
+onwards --- >> S3 with dynamoDB table
+
+How to write terraform file in different file. 
+
+
+
+
 
 
 
