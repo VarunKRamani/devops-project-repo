@@ -52,6 +52,9 @@ State locking is a mechanism that prevents multiple people or processes from cha
 
 How it works? --> when a process whats to make an update, it places a lock on the statefile, in remote backend, so on one else can apply changes until the lock is released. 
 results in avoiding of coonflits, duplication an ensures only one changes is made at a time, keeing the infrastructure consistent.
+Locking with AWS S3 and DynamoDB
+
+Where S3 is for remote storage and DynamoDB table used for state locking
 
 Process -- For storing the statefile in remote backend for which we will be using S3 and will be using DynamoDB table for state locking.
 Will be writing a .tf file to create S3 and dynamoDB -- bellow is the explination and the fill written in VScode will is uploded in the _/Terraform_  
