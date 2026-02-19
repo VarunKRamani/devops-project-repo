@@ -48,6 +48,9 @@ Ex: AWS S3, terraform cloud etc
 As we store the statefile in remote backend its also important to have set permissions or a lock machanism that prevents multiple people or processes from changing the state at the same time.
 
 
+Locking with AWS S3 and DynamoDB
+
+Where S3 is for remote storage and DynamoDB table used for state locking
 
 onwards --- >> S3 with dynamoDB table
 
