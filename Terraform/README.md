@@ -62,3 +62,5 @@ Will be writing a .tf file to create S3 and dynamoDB -- bellow is the explinatio
 4. Then we can create output.tf to see the output if needed.
 
 make use of terraform aws provider documentation-- for code samples
+
+The /EKS ia added in this folder
