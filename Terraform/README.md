@@ -54,5 +54,11 @@ How it works? --> when a process whats to make an update, it places a lock on th
 results in avoiding of coonflits, duplication an ensures only one changes is made at a time, keeing the infrastructure consistent.
 
 Process -- For storing the statefile in remote backend for which we will be using S3 and will be using DynamoDB table for state locking.
+Will be writing a .tf file to create S3 and dynamoDB -- bellow is the explination and the fill written in VScode will is uploded in the _/Terraform_  
 
-1.
+1. Start from provider block, in our case its AWS
+2. Next resource block, tell aws what resources need to be created.
+3. A Variables file to pass veriables to the resource block.
+4. Then we can create output.tf to see the output if needed.
+
+make use of terraform aws provider documentation-- for code samples
