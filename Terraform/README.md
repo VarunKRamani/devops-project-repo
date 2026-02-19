@@ -41,28 +41,29 @@ when the terraform runs initally the statefile is created locally. This is fine 
 In larger projects where multiple people need to collabrate we would rist loosing statefile in sync. The walkaround is to move the statefile to remote backend.
 
 **Remote Bancked**
-A Storage location where the statefile is stored outside the local machine, so multiple users can share and manage infrastructure safely without any conflit. 
+A Storage location where the statefile is stored outside the local machine, so multiple users can share and manage infrastructure.
 It centralizes the statefile and enables versioning and backup.
 Ex: AWS S3, terraform cloud etc
 
 As we store the statefile in remote backend its also important to have set permissions or a lock machanism that prevents multiple people or processes from changing the state at the same time.
 
+**State Locking**
+State locking is a mechanism that prevents multiple people or processes from changing the terraform state at the same time. 
 
+How it works? --> when a process whats to make an update, it places a lock on the statefile, in remote backend, so on one else can apply changes until the lock is released. 
+results in avoiding of coonflits, duplication an ensures only one changes is made at a time, keeing the infrastructure consistent.
 Locking with AWS S3 and DynamoDB
 
 Where S3 is for remote storage and DynamoDB table used for state locking
 
-onwards --- >> S3 with dynamoDB table
+Process -- For storing the statefile in remote backend for which we will be using S3 and will be using DynamoDB table for state locking.
+Will be writing a .tf file to create S3 and dynamoDB -- bellow is the explination and the fill written in VScode will is uploded in the _/Terraform_  
 
-How to write terraform file in different file. 
+1. Start from provider block, in our case its AWS
+2. Next resource block, tell aws what resources need to be created.
+3. A Variables file to pass veriables to the resource block.
+4. Then we can create output.tf to see the output if needed.
 
+make use of terraform aws provider documentation-- for code samples
 
-
-
-
-
-
-
-
-
- 
+The /EKS ia added in this folder
