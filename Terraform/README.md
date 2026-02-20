@@ -66,4 +66,83 @@ Will be writing a .tf file to create S3 and dynamoDB -- bellow is the explinatio
 
 make use of terraform aws provider documentation-- for code samples
 
-The /EKS ia added in this folder
+# Writing a terraform file (Explination)
+teraform file (.tf) for creating S3 and DynamoDB 
+-
+**1. Starting with the Provider Block**
+```sh
+provider "aws" {
+  region     = "us-west-2"
+}
+```
+what it does,
+- Tells terraform which cloud procider to use i.e. AWS
+- specifies in what region to create the resource i.e. us-west-2 (all the resources created will be in this region)
+
+**2. Resource block of S3 Bucket**
+```sh
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "demo-terraform-eks-state-s3-bucket"
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+```
+what it does,
+- Creates an S3 bucket to store our terraform statefile
+- lifecyce block - terraform can delete this bucket if destroyes. If `true` then it would refuse deletion.
+
+**3. Resource blockk of bucket versioning**
+```sh
+resource "aws_s3_bucket_versioning" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+```
+what it does,
+- It enables versioning on the S3 bucket
+- Terraform state is very sensitive so it would be easy to recover old state if corrupted or rollback mistakes, track changes and protect accidental deletion
+
+**4. Resource block of Server-side Encryption**
+```sh
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+```
+what it does,
+- Encrypts the ststefile automatically when stored
+- It is AWS-managed encryption
+
+**5. Resource block of DynamoDB table for State Locking**
+```sh
+resource "aws_dynamodb_table" "terraform_locks" {
+  name         = "terraform-eks-state-locks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+}
+```
+what it does,
+- Creates a DynamoDB table used for terraform state locking
+- when terraformm runs it creates a lock record, other users must wait until the lock is released.
+- `PAY_PER_REQUEST` - pay only when used, no capacity planninf requried.
+- `LockID` - primary key used to store lock entries (string type)
+
+# **What this file achieves and Workflow**
+
+---------------------------------xx---------------------------------------
+
+
