@@ -143,6 +143,20 @@ what it does,
 
 # **What this file achieves and Workflow**
 
----------------------------------xx---------------------------------------
+Step 0. The infrastructure is created, i.e. S3 is storing state, DynamoDB table handles locks and Encryption and versioning are enabled.
 
+Step 1. We run `terraform apply`, terraform starts the execution.
+    
+Step 2. Terraform check if the lock(DynamoDB) already exist, if no lock then it creates a lock entry and lock record stored with `LockiID`
 
+Step 3. Terraform Download current state (S3), terraform fetches the latest state file from Amazon S3.
+
+Step 4. Terraform creates execution plan, terraform compares the desired configuration and current state of the infrastructure. Then decides to create/modify/delete/do nothing.
+
+Step 5. Infrastructure Changes Execut, terraform now creates AWS resources, modifies existing resources or deletes unnecessary resources. 
+
+Step 6. Updates the State and Saves to S3, terraform updates the statefile and uploads the new version to S3 (Cause versioning is enabled the old version is preserved).
+
+Step 7. Lock Released, terraform deletes lock record from DynamoDB (Now other user can run `terraform apply`).
+
+**The file S3dynamo.tf is added in /Terraform.**
