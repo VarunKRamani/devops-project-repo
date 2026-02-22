@@ -1,3 +1,4 @@
+```sh
 #Provider and resources for S3 bucket and DynamoDB table for Terraform state management
 
 provider "aws" {
@@ -54,4 +55,6 @@ resource "aws_dynamodb_table" "terraform_table" {
     type = "S"
   }
   
+
 }
+```
