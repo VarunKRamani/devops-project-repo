@@ -1,4 +1,4 @@
-# Terraformm Learnings 
+# Terraform Learnings 
 
 **Terraform**: 
 - A tool, an Infrastructure as Code (IaC) tool used to **create, manage, and automate** cloud infrastructure using code instead of manual way of setting things up using GUI of the cloud platform. Mainly used to manage and automate infrastructure. 
