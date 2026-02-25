@@ -25,5 +25,44 @@ It is like a function, i.e. write once use many times.
 5. Module return output -- Modules can return values like resource IDs or endpoints. The output can be used by other modulesor configurations.
 
 ## Variables and how it works.
+In terraform, a Variable is defined using a variable block.
+To access the variable use `var.variable_name`\
 
----------------------------
+Basic syntax :
+
+``` hcl
+variable "variable_name"{
+  descriptin = "what this variable does"
+  type       = string
+  default    = "value"
+}
+```
+Examples :
+-  **variables.tf**
+```hcl
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-west-2"
+}
+```
+**main.tf**
+```hcl
+provider "aws" {
+  region = var.region  
+}
+```
+-  **Variables.tf**
+```hcl
+variable "instance_count" {
+  discription = "Number od EC2 instances"
+  type        = number
+  default     = 2
+}
+```
+**main.tf**
+```hcl
+resource "aws_instance" "example" {
+  count = var.instance_count
+}
+```
