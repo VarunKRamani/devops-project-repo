@@ -1,4 +1,4 @@
-## EKS Cluster
+# EKS Cluster
 
 **Requried components and code explalation.**
 - We need two(2) IAM roles, one for Cluster and other one for Node.
@@ -6,7 +6,7 @@
 - Create cluster, assign the role created.
 - Will repeate the same for both master and worker node.
 
-
+## IAM Role Resource
 ```hcl
 resource "aws_iam_role" "cluster" {
   name = "${var.cluster_name}-cluster-role"
@@ -22,7 +22,12 @@ resource "aws_iam_role" "cluster" {
     }]
   })
 }
+```
+- An IAM role is created, this role will be used by EKS control plane.
+- EKS itself needs permission to create load balancers, manage networking and talk to other aws services.
 
+## 
+```hcl
 resource "aws_iam_role_policy_attachment" "cluster_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.cluster.name
