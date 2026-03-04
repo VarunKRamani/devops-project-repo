@@ -13,5 +13,18 @@ Will be adding prerequisits, problems faces and other actions took while deployi
 - Run `terraform apply` --> Enter a value : type "yes". Now the terraform will start forming/creating and will take some time. (message will be) --> Apply complete! Resource: 32 added, 0 changed, 0 destroyed. and the output will be displayed.
 - later can be varified on AWS console.
 - Remember -- the cost clock will start, make sure to move to next k8s deployment if not run `terraform destroy`.
+## Connecting to the cluster-
+- Once the EKS cluster is created. 
+how to access it from our ec2/VM ? --> 
+Check the eks cluster created with `kubectl get nodes`.
+
+- We need to update the kubeconfig file with the cluster information.
+(need to AWS CLI and configure it with `aws configure`).
+
+- Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
+- Now run `kubectl config view` --> o/p all the details of the EKS cluster.
+- To check the current context, run `kubectl config current-context`
 
 # Kubernetes
+
+
