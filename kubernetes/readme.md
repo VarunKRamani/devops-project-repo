@@ -10,8 +10,9 @@
 
 **Service Account gives a pod it's identity. It basically tell the pod who it is when talking with kubernetes API.**
 
-K8S need a way to identify the pod and what it is allowed to do. **Service account is a like user account but for pods.**
+Kubernetes need a way to identify the pod and what it is allowed to do. **Service account is a like user account but for pods.**
 
+In Kubernetes every Namespace has a **default** service account, when pod is not assigned with a service account the kubernetes will automatically assign thid **default service account** to the pod with default permissions.
 
 
 
