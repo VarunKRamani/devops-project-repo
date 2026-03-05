@@ -8,6 +8,10 @@
 
 ## Service Account
 
+**Service Account gives a pod it's identity. It basically tell the pod who it is when talking with kubernetes API.**
+
+K8S need a way to identify the pod and what it is allowed to do. **Service account is a like user account but for pods.**
+
 
 
 
