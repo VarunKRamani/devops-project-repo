@@ -29,7 +29,11 @@ As we know containers are ephemeral in nature we need healing.
 ## Deployment
 **Deployment takes care of both auto Scaling and Healing.**
 
-(When a container is deployed and it goes down, by default with no restsrt policy the container will not be up(running). During high traffic there is a need of high availability for the containers to handle trreffic and container can handle a set traffic at once i.e. single cpoy of a conatiner is not enough. In these casees we need both scaling and healing)
+**Deployment** is a resource in kubernetes, when a microservece is deployed the deployment resource will create a intermediate resource called **replica set**, this replica set will spin up the pods/caontiners in kubernetes.
+
+(When a container is deployed and it goes down, by default with no restart policy the container will not be up(running). During high traffic there is a need of high availability for the containers to handle trreffic and container can handle a set traffic at once i.e. single cpoy of a conatiner is not enough. In these cases we need both scaling and healing)
+
+Example: If we set 'replica set: 3' in deploy.yaml file the replica set will spin up 3 pods, it make sure the pod count stay 3 all the time, and if a pod goes down the replica set will spin up a new pod to mentain that 3 count. 
 
 ## Scaling 
 Scaling is the mechanism where kubernetes will run set number of replicas, will scale up and scale down if set so. Kubernetes will stay true to the set number and mentains the set number of replicas.
@@ -43,7 +47,13 @@ The process of **replacing the failed and unhealthy pods** to again menatin the 
 
 __________________________________________________________________________________________________________________________________________________________________________________
 
-Deployment is a resource in kubernetes, when a microservece is deployed the deployment resource will create a intermediate resource called **replica set**, this replica set will spin up the pods/caontiners in kubernetes.
+## Service and Service Discovery
 
-Example: If we set 'replica set: 3' in deploy.yaml file the replica set will spin up 3 pods, it make sure the pod count stay 3 all the time, and if a pod goes down the replica set will spin up a new pod to mentain that 3 count. 
+A kubernetes service is a stable address/endpoint, a name or ip that helps us reach the a group of pods easily, even as those pods stop, start or change.
+
+Service work on the concept called Labels and Selectors. Lablels are nothing but tags or key-value pairs that are attached to the pods and the service resource uses selectors to find the pod with the right lable and routes the traffic to it.
+
+So, when a pod goes down and a new one is created (usually by a Deployment), the Service automatically picks up the new pod. This is because the **Service is always watching for pods that match its selector**. As soon as the **new pod comes up and has the right labels**, the Service automatically starts routing traffic to it. This is how the **Service Discoverty** works.
+
+_This is how the deployment is solving the problem of scaling and healing and service is solving the problem of service discovery._
 
