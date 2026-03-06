@@ -27,4 +27,7 @@ Check the eks cluster created with `kubectl get nodes`.
 
 # Kubernetes
 
+To deploy the project on kubernetes--
 
+- Make sure all the requried **resources are created using Terraform.**
+- Clone the repository **`ultimate-devops-project-demo`**(already done) to get the deploy.yaml files of the microservices and the **complete-deploy.yaml** file for the deployment.
