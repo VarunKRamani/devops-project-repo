@@ -1,4 +1,4 @@
-# Kubernetes Implementation --
+# Kubernetes --
 
 - Service Account
 - Deployment and service discovery
@@ -45,7 +45,7 @@ Healing is the mechanism where kubernetes replaces failed or unhealthy pods so t
 
 The process of **replacing the failed and unhealthy pods** to again menatin the total number of desired replicas is **healing**.
 
-__________________________________________________________________________________________________________________________________________________________________________________
+_____
 
 ## Service and Service Discovery
 
@@ -56,4 +56,52 @@ Service work on the concept called Labels and Selectors. Lablels are nothing but
 So, when a pod goes down and a new one is created (usually by a Deployment), the Service automatically picks up the new pod. This is because the **Service is always watching for pods that match its selector**. As soon as the **new pod comes up and has the right labels**, the Service automatically starts routing traffic to it. This is how the **Service Discoverty** works.
 
 _This is how the deployment is solving the problem of scaling and healing and service is solving the problem of service discovery._
+
+
+___
+## Writing a Kubernetes file 
+
+We have different types of resources in Kuberentes. Will start the file by :
+
+```
+apiversion: apps/V1
+kind: Deployment
+matadata:
+  name:
+  lables:
+```
+are common accross all kubernetes resource.
+
+- `apiversion` --> Tells Kubernetes which API version this object belongs to.
+- `kind` --> Tells Kubernetes what resource you are creating.
+- `metadata` --> Identity of the object. Used for naming, grouping and selecting resources.
+
+Next section is `spec` which differes from rsources to rsources.
+
+```
+spec:
+  replicas: 1
+  selectors:
+     matchLabels:
+  template:
+    metadata:
+      lables:
+    spec:
+      serviceAccountName:
+      containers:
+        - name:
+          image: 'image-location-that-is-containerized'
+          ports:
+          env:
+          volumes:
+```
+- `spec` --> This is where Kubernetes is told how the app should run.
+- `replicas` --> How many pods should run.
+- `selectors` --> How the deployment identifies its pods.
+- `template` -- > The pod realted configurations are put this and everything inside here describes the pod that will be created.
+- `lables` -->  under `metadata` is used in service discovery.
+- `containers` --> Defines the actual application container. Includes container name, image, ports and env variables
+
+
+
 
