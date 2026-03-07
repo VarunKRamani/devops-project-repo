@@ -62,7 +62,7 @@ ___
 ## Writing a Kubernetes file 
 
 We have different types of resources in Kuberentes. Will start the file by :
-
+**deploy.yaml**
 ```
 apiversion: apps/v1
 kind: Deployment
@@ -113,6 +113,7 @@ spec:
 - `volumes` --> volume gives your containers a place to store data outside of the container’s own file system. This means if a pod dies or restarts, the data in the volume stays intact.
 ___
 ## Service Resource Structure
+**Svr.yaml**
 ```
 apiversion: v1
 kind: service
@@ -142,4 +143,15 @@ spec:
 ___
 
 ## How does it work ??
+deploy.yaml :
+This files tells kubernetes to run the application i.e. pull the container image, create a Pod, and keep that container running.
+So after applying this file, Kubernetes starts the application inside a Pod.
 
+**deploy.yaml → creates the Pod running the application**
+
+svr.yaml :
+This makes the application reachable inside the cluster. It creates a Service that provides a stable network endpoint and forwards traffic to the Pod running the application.
+
+svc.yaml → creates a Service that sends traffic to that Pod
+
+In simple words, deployment runs the application and service allows other services or Pods to reach that application.
