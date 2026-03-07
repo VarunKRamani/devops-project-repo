@@ -64,7 +64,7 @@ ___
 We have different types of resources in Kuberentes. Will start the file by :
 
 ```
-apiversion: apps/V1
+apiversion: apps/v1
 kind: Deployment
 matadata:
   name: 'application_name'
@@ -76,6 +76,7 @@ are common accross all kubernetes resource.
 - `kind` --> Tells Kubernetes what resource you are creating.
 - `metadata` --> Identity of the object. Used for naming, grouping and selecting resources.
 
+## Deployment Resource Structue.
 Next section is `spec` which differes from rsources to rsources.
 
 ```
@@ -85,16 +86,24 @@ spec:
      matchLabels:
   template: 
     metadata:
-      lables: 'these lables are used during service discovery'
-    spec:
+        lables: 'these lables are used during service discovery'
+     spec:
       serviceAccountName: 'service-account-name,creted-for-this-pod-to-be-assigned'
       containers:
         - name: 'conatiner-name'
           image: 'image-location-that-is-containerized'
           ports:
           env:
-          volumes:
+          volumesMounts:
+  volumes:
 ```
+
+- spec --> replicas, selectors and template
+- template --> metadata and spec
+- template --> spec --> serviceAccountName, containers and volumes
+- containers --> name, image, ports env and volumesMounts
+
+
 - `spec` --> This is where Kubernetes is told how the app should run.
 - `replicas` --> How many pods should run.
 - `selectors` --> How the deployment identifies its pods.
@@ -102,7 +111,35 @@ spec:
 - `lables` -->  under `metadata` is used in service discovery.
 - `containers` --> Defines the actual application container. Includes container name, image, ports and env variables
 - `volumes` --> volume gives your containers a place to store data outside of the container’s own file system. This means if a pod dies or restarts, the data in the volume stays intact.
+___
+## Service Resource Structure
+```
+apiversion: v1
+kind: service
+metadata:
+  name:
+  lables:
+```
+As mentioned its common for to begin the kubernetes file with the above elements `apiversion` is v1 insted of apps/v1
 
+```
+spec:
+  type: defines-the-type-of-service
+  selectors:
+  ports:
+    port:
+    name:
+    targetport:
+```
 
+- There are three(3) `type` of service : clusterIp, nodeport and load balancer.
+- `type` --> Defines how the service is exposed.
+- `selectors` --> Selects which pods receive traffic. (a lable same as in pod resource or in deployment template)
+- `ports` --> service port.
+- `targetport` --> This the pod container port.
+- Traffic Flow :   User request --> service port --> target port
 
+___
+
+## How does it work ??
 
