@@ -67,7 +67,7 @@ We have different types of resources in Kuberentes. Will start the file by :
 apiversion: apps/V1
 kind: Deployment
 matadata:
-  name:
+  name: 'application_name'
   lables:
 ```
 are common accross all kubernetes resource.
@@ -83,13 +83,13 @@ spec:
   replicas: 1
   selectors:
      matchLabels:
-  template:
+  template: 
     metadata:
-      lables:
+      lables: 'these lables are used during service discovery'
     spec:
-      serviceAccountName:
+      serviceAccountName: 'service-account-name,creted-for-this-pod-to-be-assigned'
       containers:
-        - name:
+        - name: 'conatiner-name'
           image: 'image-location-that-is-containerized'
           ports:
           env:
@@ -101,6 +101,7 @@ spec:
 - `template` -- > The pod realted configurations are put this and everything inside here describes the pod that will be created.
 - `lables` -->  under `metadata` is used in service discovery.
 - `containers` --> Defines the actual application container. Includes container name, image, ports and env variables
+- `volumes` --> volume gives your containers a place to store data outside of the container’s own file system. This means if a pod dies or restarts, the data in the volume stays intact.
 
 
 
