@@ -31,3 +31,5 @@ To deploy the project on kubernetes--
 
 - Make sure all the requried **resources are created using Terraform.**
 - Clone the repository **`ultimate-devops-project-demo`**(already done) to get the deploy.yaml files of the microservices and the **complete-deploy.yaml** file for the deployment.
+- The file complete-deploy.yaml is available in kuberentes direstory. this consist of all the deployment and service resource in it and even the service account is created(for more info look into the file).
+- Run, `terraform init`, `terraform plan` and  `terraform apply`
