@@ -155,3 +155,13 @@ This makes the application reachable inside the cluster. It creates a Service th
 svc.yaml → creates a Service that sends traffic to that Pod
 
 In simple words, deployment runs the application and service allows other services or Pods to reach that application.
+
+___
+## Types of services:
+
+There are typically three types of services in kubernetes:
+1. Cluster IP
+2. Node port
+3. Load Balancer service type.
+
+The service types of our svc in project was Cluster IP. We need to change it to LB type to access the project/frontend. 
