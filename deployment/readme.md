@@ -32,4 +32,12 @@ To deploy the project on kubernetes--
 - Make sure all the requried **resources are created using Terraform.**
 - Clone the repository **`ultimate-devops-project-demo`**(already done) to get the deploy.yaml files of the microservices and the **complete-deploy.yaml** file for the deployment.
 - The file complete-deploy.yaml is available in kuberentes direstory. this consist of all the deployment and service resource in it and even the service account is created(for more info look into the file).
-- Run, `terraform init`, `terraform plan` and  `terraform apply`
+- Connect to the cluster that was created, How --> run `kubectl config current-context`, o/p --> should see the cluster that was created.
+- Quick check if any pods containers are running / no previous deployments, How --> run `kubectl get all`
+- Get to the path 'ultimate-devops-project-demo/kubernetes'.
+- Need to create a service account `vim serviceaccount.yaml` check, and run `kubectl apply —f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry—demo created'. To varify run `kubectl get sa`. Note : If not careated the kubernetes will start using the default service account. 
+- Run `terraform apply -f complete-deploy.yaml`. This will start creating the services. list of created services and then deployments will be shown.
+- To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
+- To check services run `kubectl get svc`
+
+- How to access this deployed project ? --> 
