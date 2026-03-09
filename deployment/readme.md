@@ -38,6 +38,7 @@ To deploy the project on kubernetes--
 - Need to create a service account `vim serviceaccount.yaml` check, and run `kubectl apply —f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry—demo created'. To varify run `kubectl get sa`. Note : If not careated the kubernetes will start using the default service account. 
 - Run `terraform apply -f complete-deploy.yaml`. This will start creating the services. list of created services and then deployments will be shown.
 - To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
-- To check services run `kubectl get svc`
+- To check services run `kubectl get svc`.
+- Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
 
 - How to access this deployed project ? --> 
