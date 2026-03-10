@@ -165,3 +165,11 @@ There are typically three types of services in kubernetes:
 3. Load Balancer service type.
 
 The service types of our svc in project was Cluster IP. We need to change it to LB type to access the project/frontend. 
+
+When a cluster is created the kubernetes creates internal network which is cluster network using CNI - container network interface, by default the service type is Cluster IP and it will not be accessable from outside the cluster
+
+- Cluster IP : This exposes the application only inside the Kubernetes cluster. It only allows service to service communication or pod to pod communication within the cluster. This service is extermely secure. It is used in cases where the service should not be explored outside.
+
+- Node Port: This exposes the service outside the cluster using a port on each node.
+  
+- Load Blancer: This exposes the service using a cloud provider’s load balancer. It unables the public access for the apploaction.
