@@ -41,4 +41,18 @@ To deploy the project on kubernetes--
 - To check services run `kubectl get svc`.
 - Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
 
-- How to access this deployed project ? --> 
+## How to access this deployed project ?
+We have set the `type: ClusterIP` as service type in the service resource and as we know the clusterIP only allows the internal connection among clusters. We failed to access the frontend. 
+Now, 
+To be able to access the project we need to change the service type to **LoadBalancer** type, for the project to be accessed by public or external world. 
+
+How, 
+
+The service type of frontendproxy need to be changed :
+- Run `kubectl get svc I grep frontendproxy`, get the full name of the service and run `kubectl edit svc opentelemetry—demo—frontendproxy`.
+- Change the type to LoadBalancer i.e. `type: LoadBa1ancer`, save and exit.
+- Once done the o/p --> `service/opentelemetry—demo-frontendproxy edited`. Wait for 5-10 min.(cause the ccm will speak to aws and create a LB, can be checked in aws console.)
+- Get the External Ip using, run `kubectl get svc opentelemetry—demo—frontendproxy` and note the port too.
+- Now browse the ExternalIP:port.
+- 😀😀 The project is successfully deployed the application on Kubernetes Cluster !!!!! 
+
