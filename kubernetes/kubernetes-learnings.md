@@ -182,3 +182,43 @@ ___
 3. Each service gets its own external entry point. Ingress is much more efficient.
 4. Provider Dependency: LoadBalancer works through the Cloud Controller Manager (CCM).
 5. Not Ideal for Large Microservice Systems: If you expose every microservice externally, it becomes messy. 10 services → 10 load balancers, this leads to: high cost, difficult management and complex networking.
+
+**Modern Solution (What is commonly used today)**
+
+Instead of many load balancers:
+
+Users --> LoadBalancer --> Ingress Controller --> Multiple Services
+
+## Ingress Controller
+
+So, what is Ingress controller exactly doing here? --? Ingress allows one load balancer for the entire cluster. Ingress is basically a smart router. It routes traffic based on:
+-  URL path
+-  Hostname
+-  Domain
+```
+example.com/cart → cart service
+example.com/payments → payment service
+example.com/orders → order service
+```
+**Only one external entry point.**
+```
+Users
+  │
+  ▼
+LoadBalancer
+  │
+  ▼
+Ingress Controller
+  │
+  ├── frontend service
+  ├── cart service
+  ├── payment service
+  └── order service--
+```
+
+Ingress itself is just a rule. Something must implement it. That is called an **Ingress Controller**. Common ones are:
+
+- NGINX Ingress Controller
+- Traefik
+- HAProxy
+
