@@ -173,3 +173,12 @@ When a cluster is created the kubernetes creates internal network which is clust
 - Node Port: This exposes the service outside the cluster using a port on each node.
   
 - Load Blancer: This exposes the service using a cloud provider’s load balancer. It unables the public access for the apploaction.
+
+___
+## Cons of Taking this **Load Balancer** approach and how to Improve
+
+1. Not Fully Declarative (Provider-Specific Config): Kubernetes creates the load balancer, but advanced configuration is outside Kubernetes control. HTTP → HTTPS, SSL certificates and Advanced routing, these are handled by the cloud provider’s load balancer, not purely by Kubernetes YAML.
+2. Cost: Each LoadBalancer service usually creates one cloud load balancer. So multiple services = multiple load balancers = more cost.
+3. Each service gets its own external entry point. Ingress is much more efficient.
+4. Provider Dependency: LoadBalancer works through the Cloud Controller Manager (CCM).
+5. Not Ideal for Large Microservice Systems: If you expose every microservice externally, it becomes messy. 10 services → 10 load balancers, this leads to: high cost, difficult management and complex networking.
