@@ -222,3 +222,9 @@ Ingress itself is just a rule. Something must implement it. That is called an **
 - Traefik
 - HAProxy
 
+**Advantages of Ingress Controller**
+- Single Entry Point: One external endpoint can expose multiple services in the cluster.
+- Cost Efficient: Reduces the need for multiple cloud load balancers
+- Path-based Routing: Routes traffic based on URL paths. Example: /cart → cart-service
+- Host-based Routing: Different domains can route to different services. Example: api.example.com → backend
+- SL/TLS Termination: Handles HTTPS at the ingress level instead of configuring SSL in every service.
