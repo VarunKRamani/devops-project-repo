@@ -40,5 +40,3 @@ To deploy the project on kubernetes--
 - To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
 - To check services run `kubectl get svc`.
 - Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
-
-- How to access this deployed project ? --> 
