@@ -155,3 +155,76 @@ This makes the application reachable inside the cluster. It creates a Service th
 svc.yaml → creates a Service that sends traffic to that Pod
 
 In simple words, deployment runs the application and service allows other services or Pods to reach that application.
+
+___
+## Types of services:
+
+There are typically three types of services in kubernetes:
+1. Cluster IP
+2. Node port
+3. Load Balancer service type.
+
+The service types of our svc in project was Cluster IP. We need to change it to LB type to access the project/frontend. 
+
+When a cluster is created the kubernetes creates internal network which is cluster network using CNI - container network interface, by default the service type is Cluster IP and it will not be accessable from outside the cluster
+
+- Cluster IP : This exposes the application only inside the Kubernetes cluster. It only allows service to service communication or pod to pod communication within the cluster. This service is extermely secure. It is used in cases where the service should not be explored outside.
+
+- Node Port: This exposes the service outside the cluster using a port on each node.
+  
+- Load Blancer: This exposes the service using a cloud provider’s load balancer. It unables the public access for the apploaction.
+
+___
+## Cons of Taking this **Load Balancer** approach and how to Improve
+
+1. Not Fully Declarative (Provider-Specific Config): Kubernetes creates the load balancer, but advanced configuration is outside Kubernetes control. HTTP → HTTPS, SSL certificates and Advanced routing, these are handled by the cloud provider’s load balancer, not purely by Kubernetes YAML.
+2. Cost: Each LoadBalancer service usually creates one cloud load balancer. So multiple services = multiple load balancers = more cost.
+3. Each service gets its own external entry point. Ingress is much more efficient.
+4. Provider Dependency: LoadBalancer works through the Cloud Controller Manager (CCM).
+5. Not Ideal for Large Microservice Systems: If you expose every microservice externally, it becomes messy. 10 services → 10 load balancers, this leads to: high cost, difficult management and complex networking.
+
+**Modern Solution (What is commonly used today)**
+
+Instead of many load balancers:
+
+Users --> LoadBalancer --> Ingress Controller --> Multiple Services
+
+## Ingress Controller
+
+So, what is Ingress controller exactly doing here? --? Ingress allows one load balancer for the entire cluster. Ingress is basically a smart router. It routes traffic based on:
+-  URL path
+-  Hostname
+-  Domain
+```
+example.com/cart → cart service
+example.com/payments → payment service
+example.com/orders → order service
+```
+**Only one external entry point.**
+```
+Users
+  │
+  ▼
+LoadBalancer
+  │
+  ▼
+Ingress Controller
+  │
+  ├── frontend service
+  ├── cart service
+  ├── payment service
+  └── order service--
+```
+
+Ingress itself is just a rule. Something must implement it. That is called an **Ingress Controller**. Common ones are:
+
+- NGINX Ingress Controller
+- Traefik
+- HAProxy
+
+**Advantages of Ingress Controller**
+- Single Entry Point: One external endpoint can expose multiple services in the cluster.
+- Cost Efficient: Reduces the need for multiple cloud load balancers
+- Path-based Routing: Routes traffic based on URL paths. Example: /cart → cart-service
+- Host-based Routing: Different domains can route to different services. Example: api.example.com → backend
+- SL/TLS Termination: Handles HTTPS at the ingress level instead of configuring SSL in every service.
