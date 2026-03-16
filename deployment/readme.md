@@ -62,4 +62,9 @@ ___
 ## Deploying Project using Ingress Controller 
 
 - Will start with checking the current cluster `kubectl config current-context`
-- 
+- We need to create IAM role and assign policy with requried permissions to the IAM role.
+- We will connect the service account with IAM role using IAM OIDC provider.
+- We need to configure the IAM OIDC provider, run `export cluster_name=<CLUSTER—NAME>`.
+- Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`
+- The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`.
+- Add the OIDC provider to the cluster, run `eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve`
