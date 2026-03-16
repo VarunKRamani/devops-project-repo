@@ -56,3 +56,7 @@ The service type of frontendproxy need to be changed :
 - Get the External Ip using, run `kubectl get svc opentelemetry—demo—frontendproxy` and note the port too.
 - Now browse the ExternalIP:port.
 - 😀😀 The project is successfully deployed the application on Kubernetes Cluster !!!!! 
+
+We came to know how how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
+___
+## Deploying Project using Ingress Controller 
