@@ -57,6 +57,9 @@ The service type of frontendproxy need to be changed :
 - Now browse the ExternalIP:port.
 - 😀😀 The project is successfully deployed the application on Kubernetes Cluster !!!!! 
 
-We came to know how how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
+We came to know how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
 ___
 ## Deploying Project using Ingress Controller 
+
+- Will start with checking the current cluster `kubectl config current-context`
+- 
