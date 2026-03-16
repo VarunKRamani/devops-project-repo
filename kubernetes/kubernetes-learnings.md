@@ -228,3 +228,21 @@ Ingress itself is just a rule. Something must implement it. That is called an **
 - Path-based Routing: Routes traffic based on URL paths. Example: /cart → cart-service
 - Host-based Routing: Different domains can route to different services. Example: api.example.com → backend
 - SL/TLS Termination: Handles HTTPS at the ingress level instead of configuring SSL in every service.
+
+___
+
+IAM ONCD :
+
+What is it ? -->  OIDC (OpenID Connect) allows Kubernetes to prove its identity to the cloud provider. With this, pods can access cloud resources securely without storing AWS credentials.
+
+Why it is importante ? --> Temporary tokens instead of permanent keys, No hardcoded AWS credentials inside pods and Better security
+
+Work Flow:
+
+1. A Pod wants to access AWS resource
+2. Kubernetes generates a service account token. This token proves the identity of the pod.
+3. The token is verified using OIDC provider.
+4. AWS IAM maps the service account to an IAM Role
+5. Pod gets temporary AWS permissions
+
+**Pod - (token) -> OIDC Provider --> AWS IAM Role --> AWS Resource (S3 / DB etc)**

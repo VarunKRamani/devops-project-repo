@@ -56,3 +56,29 @@ The service type of frontendproxy need to be changed :
 - Get the External Ip using, run `kubectl get svc opentelemetry—demo—frontendproxy` and note the port too.
 - Now browse the ExternalIP:port.
 - 😀😀 The project is successfully deployed the application on Kubernetes Cluster !!!!! 
+
+We came to know how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
+___
+## Deploying Project using Ingress Controller 
+
+- Will start with checking the current cluster `kubectl config current-context`
+- We need to create IAM role and assign policy with requried permissions to the IAM role.
+- We will connect the service account with IAM role using IAM OIDC provider.
+- We need to configure the IAM OIDC provider, run `export cluster_name=<CLUSTER—NAME>`.
+- Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`
+- The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`.
+- Add the OIDC provider to the cluster, run `eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve`
+- Need to create Service accoutn and IAM policy, policy with ELB related permissions, create IAM role and attach that to the service account of ALB controller.
+- To get the policy, AWS provides the policy in `.JSON` form. Run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json`
+- The file will be found run `ls` and find `iam_policy.json` contains all the permissions related to elastic load balancer.
+- To create IAM policy run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`. The policy will get created.
+- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve` this command creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override
+
+  
+- **Install Helm** from using documentataion.
+- Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`
+- Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. O/p --> AWS Load Balancer controller installed!
+- Verify the pods if up and running, run `kubectl get pods —n kube—system`.
+- Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
+
+
