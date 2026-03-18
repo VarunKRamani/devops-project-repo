@@ -55,7 +55,9 @@ The service type of frontendproxy need to be changed :
 - Once done the o/p --> `service/opentelemetry—demo-frontendproxy edited`. Wait for 5-10 min.(cause the ccm will speak to aws and create a LB, can be checked in aws console.)
 - Get the External Ip using, run `kubectl get svc opentelemetry—demo—frontendproxy` and note the port too.
 - Now browse the ExternalIP:port.
-- 😀😀 The project is successfully deployed the application on Kubernetes Cluster !!!!! 
+- 😀😀 The project is successfully deployed. The application is running on Kubernetes Cluster !!!!!
+
+_**Note**_ : Change the type back to node port `type: NodePort` once deployed and checked. Load balancer costs $.
 
 We came to know how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
 ___
@@ -80,5 +82,44 @@ ___
 - Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. O/p --> AWS Load Balancer controller installed!
 - Verify the pods if up and running, run `kubectl get pods —n kube—system`.
 - Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
+
+___
+
+Make sure the load balancer is removed --> run `kubectl edit svc opentelemetry—demo—frontendproxy` and change the type back to `type: NodePort`, the load balancer will be deleted automatically 
+
+## Creating the Ingress Resource 
+- We are creating for Frontend proxy, go to `~/ultimate-devops—project-demo/kubernetes/frontendproxy$` and create **ingress.yaml** run `vim ingress.yaml`.
+- Reffer documentation for annotations. <img width="900" height="80" alt="image" src="https://github.com/user-attachments/assets/9fd5b9b7-9684-48fe-bde2-f7d4a6a1a275" />
+- We will be providing a dummy doamin name for now `example.com`, and update the DNS records to test the project deployment. 
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-proxy
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: opentelemetry-demo-frontendproxy
+                port:
+                  number: 8080
+```
+
+- Save the file and run `kubectl apply -f ingress.yaml`, the o/p -->> "ingress.networking.k8s.io/frontend—proxy created"
+- The ingress controller read the ingress resource and created a loadbalancer. to check run `kubectl get ing`
+- Check the AWS console under loadbalancer, the LB will be created.
+- Once the status is `Active`, try running the **DNS name**, the project will not be accessible, it will fail. Cause, in the ingress.yaml file we have said only allow the access from `**example.com**`. As example.com is not a real domain, we need to edit DNS records of the system and then access the project.
+- Run `nslookup DNS-name-given-by-loadbalancer`, try running the IPs and DNS names to access the project, it will FAIL. As mentioned only from example.com we can access the project.
+- Will change the local DNS records of the local system in our case the VM for testing, run `sudo vim /etc/hosts`. Add the IP from nslookup command and example.com (Ex: 44.55.112.21 example.com) and save. (note: it might not work on some browsers, no need to worry)
+- 😀😀 The project is successfully deployed using Ingress !!!!!!!!!!
 
 
