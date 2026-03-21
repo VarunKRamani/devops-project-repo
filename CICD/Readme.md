@@ -17,9 +17,50 @@ Goal: Release changes quickly and reliably.
 
 ## GitHub Actions structure
 
+GitHub Actions is a CI orchestrator that is provided by GitHub.
+If the source code is in GitHub repo, We need to create file .github/workflows and place a yaml file (Ex: CI.yaml), which will instruct GitHub actions what to run. 
+
+GitHub has provided with **Actions**, these actions are like plugins or the modules. 
+
 A GitHub Actions workflow is just a YAML file with hierarchy:
 
 Workflow -> Jobs -> Steps.
 Steps run sequentially inside a job.
 
+Example for Structure of .yaml file for GitHub Actions :
+```
+name: CI Pipeline
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up Node.js (example runtime)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Run tests
+      - name: Run tests
+        run: npm test
+
+      # 5. Build application
+      - name: Build app
+        run: npm run build
+```
