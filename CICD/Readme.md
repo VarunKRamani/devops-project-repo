@@ -1,4 +1,4 @@
-CICD Overview 
+# CICD Overview 
 
 CI operaets around build process and CD operates around deployment process. 
 
@@ -15,7 +15,7 @@ Goal: Release changes quickly and reliably.
 
 **CI/CD is a DevOps practice that automates code integration, testing, and deployment, enabling faster and more reliable software delivery.**
 
-## GitHub Actions structure
+## CI with GitHub Actions structure
 
 GitHub Actions is a CI orchestrator that is provided by GitHub.
 If the source code is in GitHub repo, We need to create file .github/workflows and place a yaml file (Ex: CI.yaml), which will instruct GitHub actions what to run. 
@@ -27,40 +27,125 @@ A GitHub Actions workflow is just a YAML file with hierarchy:
 Workflow -> Jobs -> Steps.
 Steps run sequentially inside a job.
 
-Example for Structure of .yaml file for GitHub Actions :
+## Below is the CI for Product Catalog Service on GitHub Actions.
 ```
-name: CI Pipeline
+# CI for Product Catalog Service
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+name: product-catalog-ci
 
+on: 
+    pull_request:
+        branches:
+        - main
+```
+**Run this CI pipeline whenever someone creates or updates a pull request to the main branch**
+- The file startes with `name: product-catalog-ci` which appears on github UI, helps to identify this pipeline. (No functional impact — just a label)
+- `on:`This defines when the workflow should run.
+- `pull_request:` Trigger the workflow when: A PR is created or when a PR is updated (new commits)
+- `branches: - main` Only triggers if the PR is targeting or made on the main branch.
+
+```
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      # 1. Checkout code
-      - name: Checkout code
-        uses: actions/checkout@v3
+        steps:
+        - name: checkout code
+          uses: actions/checkout@v4
 
-      # 2. Set up Node.js (example runtime)
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+        - name: Setup Go 1.22
+          uses: actions/setup-go@v2
+          with:
+            go-version: 1.22
+        
+        - name: Build
+          run: |
+            cd src/product-catalog
+            go mod download
+            go build -o product-catalog-service main.go
 
-      # 3. Install dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # 4. Run tests
-      - name: Run tests
-        run: npm test
-
-      # 5. Build application
-      - name: Build app
-        run: npm run build
+        - name: unit tests
+          run: |
+            cd src/product-catalog
+            go test ./...
 ```
+EXP---
+```
+    code-quality:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: checkout code
+          uses: actions/checkout@v4
+        
+        - name: Setup Go 1.22
+          uses: actions/setup-go@v2
+          with:
+           go-version: 1.22
+        
+        - name: Run golangci-lint
+          uses: golangci/golangci-lint-action@v6
+          with:
+            version: v1.55.2
+            run: golangci-lint run
+            working-directory: src/product-catalog
+```
+EXP---
+```
+    docker:
+        runs-on: ubuntu-latest
+
+        needs: build
+
+        steps:
+        - name: checkout code
+          uses: actions/checkout@v4
+
+        - name: Install Docker
+          uses: docker/setup-buildx-action@v1
+        
+        - name: Login to Docker
+          uses: docker/login-action@v3
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_TOKEN }}
+
+        - name: Docker Push
+          uses: docker/build-push-action@v6
+          with:
+            context: src/product-catalog
+            file: src/product-catalog/Dockerfile
+            push: true
+            tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
+
+```
+EXP---
+```    
+    updatek8s:
+        runs-on: ubuntu-latest
+
+        needs: docker
+
+        steps:
+        - name: checkout code
+          uses: actions/checkout@v4
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Update tag in kubernetes deployment manifest
+          run: | 
+               sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}|" kubernetes/productcatalog/deploy.yaml
+        
+        - name: Commit and push changes
+          run: |
+            git config --global user.email "abhishek@gmail.com"
+            git config --global user.name "Abhishek Veeramalla"
+            git add kubernetes/productcatalog/deploy.yaml
+            git commit -m "[CI]: Update product catalog image tag"
+            git push origin HEAD:main -f
+            
+```
+Exp---
+
+**The CI for product catalog service CI.yaml is been added to /CICD**
+
