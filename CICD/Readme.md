@@ -98,7 +98,16 @@ jobs:
             run: golangci-lint run
             working-directory: src/product-catalog
 ```
-EXP---
+- This defines a separate job called `code-quality`
+- Runs independently from build. **Uses a fresh Ubuntu machine**. Check code quality (not build, not test logic — but **code standards**)
+- Cause its running in new ubuntu machine, need to install go and set it up again, which `Setup Go 1.22`.
+- `golangci/golangci-lint-action@v6` --> Uses a prebuilt action for linting Go code.
+- Linting checks code quality, not functionality. It looks for Bad coding practices, Unused variables and Possible bugs.
+- `run: golangci-lint run` --> Command to execute linting.
+- `src/product-catalog` --> Run linting only in the project folder.
+
+- **Code-quality job ensures your code follows best practices before moving forward**
+
 ```
     docker:
         runs-on: ubuntu-latest
@@ -127,7 +136,19 @@ EXP---
             tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
 
 ```
-EXP---
+- Builds the Docker image and pushes it to Docker Hub.
+- New job named `docker`. Runs on a fresh Ubuntu machine.
+- `needs: build` --> Means, Docker job runs only if `build` job succeeds. If build fails this job will NOT run.
+- `docker/setup-buildx-action@v1` --> Sets up Docker Buildx, an Advanced Docker builder which allows Faster builds, Multi-platform builds (amd64, arm) and Better caching.
+- `with:
+  username:
+  password:` --> Authenticates your pipeline with Docker Hub, because to Push image it requires authentication.
+- `docker/build-push-action@v6` --> Build & Push Docker image.
+- `src/product-catalog` --> Folder used for build, contains source code and Dockerfile.
+- `push: true` --> Push image to Docker Hub after build.
+- `tags:` --> Image naming.
+- **Docker job converts your application into a versioned container image and stores it in Docker Hub**.
+
 ```    
     updatek8s:
         runs-on: ubuntu-latest
