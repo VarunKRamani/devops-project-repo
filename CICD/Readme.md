@@ -69,7 +69,15 @@ jobs:
             cd src/product-catalog
             go test ./...
 ```
-EXP---
+- A job are set of steps that run on a machine.
+- `runs-on: ubuntu-latest` --> GitHub creates a fresh Ubuntu machine. New VM → run your steps → delete VM.
+- `steps:` These are the tasks that run one after another.
+- `name: checkout code` --> Name of the setp.
+- `uses: actions/checkout@v4` --> We are using a pre-built action (module) created by GitHub. **Downloads the GitHub repository into the machine.**
+- Setup Go, Installs Go (programming language) in the machine, as the app is written in Go.
+- Build step, `cd src/product-catalog` --> Gets into the app folder, `go mod download` --> Download required dependencies and `go build -o product-catalog-service main.go`--> Compile the app into a binary file
+-  `cd src/product-catalog` --> Run tests, Gets into project folder and `go tests ./...` --> runs all test files.
+
 ```
     code-quality:
         runs-on: ubuntu-latest
