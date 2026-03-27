@@ -122,4 +122,34 @@ spec:
 - Will change the local DNS records of the local system in our case the VM for testing, run `sudo vim /etc/hosts`. Add the IP from nslookup command and example.com (Ex: 44.55.112.21 example.com) and save. (note: it might not work on some browsers, no need to worry)
 - 😀😀 The project is successfully deployed using Ingress !!!!!!!!!!
 
+___
 
+# CICD
+
+## CI with Github Actions:
+
+Will be handling the CI with the help of Github Actions, reson to choose Github actions is that we are using GitHub as our version control paltform and will be easier to perform CI actions. 
+
+- Get the **CI.yaml** prepared (the code explanation of CI.yaml is in /CICD/readme.md )
+
+[We are performing the CI for a microservice **product catalog** for understanding the CI actions and to understand the structure of CI.yaml (jobs and steps are explained in that file.)]
+
+- Place the **CI.yaml** file in `.github/workflows` directory in the repo.
+- Get to the terminal and create a change and push it. run `git checkout —b githubcicheck`
+- Push a change, go to main.go and add a comment(to create a change).
+- Check it, run `git status`. o/p --> 'modified:   src/product-catalog/main .go' in red.
+- Run `git add .` and run `git commit -am "chore: verify github actions"`.
+- Run `git push origin githubcicheck`. the url for the pull request will be recived as o/p.
+- Browse the url, it might ask pull request to opentelemetry main repo, change it to the forked one under in our account. Now create the pull request, click `Create pull request`
+- Now we see github actions under action --> running the jobs build, code quality, docker and updatek8s as we defined in CI.yaml file, with each setp performed and progress will be shown on the github UI.
+- Docker job will triger if the build completes successfully and updatek8s runs if the docker job is successful. (As we mentioned needs: build under docker and needs: docker under updatek8s)
+[there might be some unused variables or unused functions proving the static code analysis under code-quality, and might fail.]
+- Once all jobs are completed, we can check the kubernetes manifest to check the updated docker image as we have coded under updatek8s job. check 'ultimate-devops-project-demo / kubernetes / productcatalog / deploy.yaml' under this `image:` with new image name. We can cross check with dockerhub tag in deploy.yaml file.
+- As the last stage got passed, the pull request and branch will be closed.
+- If updatesk8s has to triger only if all the previous jobs are successful, just change `needs: docker` to `needs: [build, code-quality, docker]`. Only if all the previous jobs are successful, then only the changes will be pushed to github from `updatek8s` job.
+
+- CI is Done !!!
+
+## CD with GitOps
+
+------------------------------
