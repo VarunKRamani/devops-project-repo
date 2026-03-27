@@ -174,7 +174,10 @@ jobs:
             git push origin HEAD:main -f
             
 ```
-Exp---
+- `needs: docker` --> this job runs only after docker job succeeds.
+- `with:
+    token: ${{ secrets.GITHUB_TOKEN }}` --> We need to push changes back to GitHub, So `GITHUB_TOKEN` gives permission to commit and push changes.
+- `run` --> Find the image: old-value and Replace the image: new-value. This ensures Kubernetes will use the new image built in previous job.
+- `Commit and push changes` --> configures the user, adds deploy.yaml, commits and push the file on the main branch.
 
 **The CI for product catalog service CI.yaml is been added to /CICD**
-
