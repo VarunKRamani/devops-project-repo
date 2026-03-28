@@ -181,3 +181,16 @@ jobs:
 - `Commit and push changes` --> configures the user, adds deploy.yaml, commits and push the file on the main branch.
 
 **The CI for product catalog service CI.yaml is been added to /CICD**
+
+___ 
+## CD With GitOps
+
+Once the kubernetes manifest is updated, CD starts from updated kubernetes manifest.
+
+GitOps is an approach where the kubernetes manifest, which got updated by the CI stage, is stored in a version control system like git. The CD platform like **Argo CD** will read these changes and **deploy** them onto target platform like **kubernetes**.
+
+- Git as version control system and deploying them on kubernetes cluster.
+- Constant monitoring of the version control system to verify if there is a new image, and if there is a new image, this platform will automatically deploy to your cluster.
+- **Reconciliation** of state, that is, if something is modified on kubernetes cluster and now Argo CD or GitOps immediately looks at this change and **overrides that to the previous state** because, in the concept of GitOps, **version control system is the source of truth**.
+- Any manual changes onto the cluster or anything changing abruptly. The state is maintained by Argo and it will again deploy the existing version in version control system.
+
