@@ -24,6 +24,7 @@ Check the eks cluster created with `kubectl get nodes`.
 - Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
 - Now run `kubectl config view` --> o/p all the details of the EKS cluster.
 - To check the current context, run `kubectl config current-context`
+___
 
 # Kubernetes
 
@@ -122,4 +123,14 @@ spec:
 - Will change the local DNS records of the local system in our case the VM for testing, run `sudo vim /etc/hosts`. Add the IP from nslookup command and example.com (Ex: 44.55.112.21 example.com) and save. (note: it might not work on some browsers, no need to worry)
 - 😀😀 The project is successfully deployed using Ingress !!!!!!!!!!
 
+___
+
+# CICD
+
+CI code explination is given under /CICD/readme.md
+
+CD --> 
+Install ArgoCD on the VM with the help of documentation.
+- Run `kubectl create namespace argocd`, We are creating a namespace called **argocd **.
+- Run ``
 
