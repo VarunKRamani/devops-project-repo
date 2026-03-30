@@ -144,4 +144,6 @@ CD -->
 [Note: Using one Argo CD, we can deploy the change to multiple clusters.]
 
 **Configuring ArgoCD with GitHub**
+- Now the Login is done, click on `Create Application` button.
+- Provide a name for the application (like 'product-catalog'), keep project name as 'default', sync policy  (Automatic : Argo CD will automatically detect any changes in the git repo and deploys that to the cluster. For every 180 sec the ArgoCD will detect the changes and deploy.), check the box of 'SELF HEAL'. Under 'Source' provide the repo's URL. 'Revision' will be 'HEAD'. Under 'PATH' provide 'kubernetes/productcatalog'. 'Cluster URL' will be 'https://kubernetes.default.svc'. 'Namespace' will be 'default'. 
 - 
