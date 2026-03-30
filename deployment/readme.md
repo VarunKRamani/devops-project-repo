@@ -130,7 +130,18 @@ ___
 CI code explination is given under /CICD/readme.md
 
 CD --> 
-Install ArgoCD on the VM with the help of documentation.
+**Installation and Setup**
 - Run `kubectl create namespace argocd`, We are creating a namespace called **argocd **.
-- Run ``
+- Run `kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+- Check the installation, run `kubectl get pods -n argocd`, and wait until all the pods are in running state.
+- Run `kubectl get svc -n argocd`, will get the list of different services of argocd, we need 'argocd-server'
+- Run `kubectl edit svc argocd-server -n argocd`, now change the `type: ClusterlP` to `type: LoadBa1ancer`. O/p --> 'service/argocd—server edited'
+- Run `kubectl get svc -n argocd`, get the `EXTERNAL-IP`. It will take some time to get the LoadBalancer up.
+- Once the ArgoCD UI is accessible, We will then proceed with configuring it with the git repository and automatically deploying the new version to K8s cluster. (click on `advanced` and then on `accept the risk and continue` button.)
+- To login once the UI is up on screen, run `kubectlget secrets -n argocd`, and run `kubectl edit secret argocd—initial-admin—secret —n argocd`, copy the password and exit the file.
+- Run `echo 'password-that-was-copied' | base64 --decode`, now copy the actual password from the output.
+- Now login to argocd, username = admin and password = the new password from the o/p.
+[Note: Using one Argo CD, we can deploy the change to multiple clusters.]
 
+**Configuring ArgoCD with GitHub**
+- 
