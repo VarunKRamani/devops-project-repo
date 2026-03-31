@@ -24,6 +24,7 @@ Check the eks cluster created with `kubectl get nodes`.
 - Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
 - Now run `kubectl config view` --> o/p all the details of the EKS cluster.
 - To check the current context, run `kubectl config current-context`
+___
 
 # Kubernetes
 
@@ -150,6 +151,29 @@ Will be handling the CI with the help of Github Actions, reson to choose Github 
 
 - CI is Done !!!
 
+CI Code explination is given under /CICD/readme.md
+
 ## CD with GitOps
+
+CD --> 
+**Installation and Setup**
+- Run `kubectl create namespace argocd`, We are creating a namespace called **argocd **.
+- Run `kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+- Check the installation, run `kubectl get pods -n argocd`, and wait until all the pods are in running state.
+- Run `kubectl get svc -n argocd`, will get the list of different services of argocd, we need 'argocd-server'
+- Run `kubectl edit svc argocd-server -n argocd`, now change the `type: ClusterlP` to `type: LoadBa1ancer`. O/p --> 'service/argocd—server edited'
+- Run `kubectl get svc -n argocd`, get the `EXTERNAL-IP`. It will take some time to get the LoadBalancer up.
+- Once the ArgoCD UI is accessible, We will then proceed with configuring it with the git repository and automatically deploying the new version to K8s cluster. (click on `advanced` and then on `accept the risk and continue` button.)
+- To login once the UI is up on screen, run `kubectlget secrets -n argocd`, and run `kubectl edit secret argocd—initial-admin—secret —n argocd`, copy the password and exit the file.
+- Run `echo 'password-that-was-copied' | base64 --decode`, now copy the actual password from the output.
+- Now login to argocd, username = admin and password = the new password from the o/p.
+[Note: Using one Argo CD, we can deploy the change to multiple clusters.]
+
+**Configuring ArgoCD with GitHub**
+- Now the Login is done, click on `Create Application` button.
+- Provide a name for the application (like 'product-catalog'), keep project name as 'default', sync policy  (Automatic : Argo CD will automatically detect any changes in the git repo and deploys that to the cluster. For every 180 sec the ArgoCD will detect the changes and deploy.), check the box of 'SELF HEAL'. Under 'Source' provide the repo's URL. 'Revision' will be 'HEAD'. Under 'PATH' provide 'kubernetes/productcatalog'. 'Cluster URL' will be 'https://kubernetes.default.svc'. 'Namespace' will be 'default'. 
+- Click on the `CREATE` button on the top.
+- Let the process run, now check if the latest deployment is done. Click on the pod that is up, under SUMMARY >> IMAGES, we get to see new name of the new image, updated by CI and now being deployed.  
+- Can push a new change in product catalog's main.go code (like a comment) and see CI CD in action, once the change is pushed.
 
 ------------------------------
