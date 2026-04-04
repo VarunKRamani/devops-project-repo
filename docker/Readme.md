@@ -6,8 +6,10 @@ Docker is a containerisation platform, used to containerise the application/serv
 Docker brings Same environment everywhere. So, the problem like 'it works on my system' is deleted with the use of this concept.
 
 Docker Lifecycle
-
-
+It Consistes of 3 steps:
+- Docker file creation
+- Docker Image creation using `docker build`
+- Docker container creation using `docker run`
 ___
 ## Docker Compose
 
