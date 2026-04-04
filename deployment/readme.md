@@ -3,6 +3,8 @@
 Will be adding prerequisits, problems faces and other actions took while deploying this peoject.
 
 # Docker
+- Clone the repo, run `git clone repo-URL`.
+- 
 
 # Terraform
 
