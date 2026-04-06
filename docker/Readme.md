@@ -10,6 +10,14 @@ It Consistes of 3 steps:
 - Docker file creation
 - Docker Image creation using `docker build`
 - Docker container creation using `docker run`
+
+Will be Writing the docker file for the 3 Microservices to understand the structure of dockerfile and understand how applications built using different languages are packaged.
+
+## Docker file for _Product Catalog_ service  - 
+
+- Get into the directory `ultimate-devops—project—demo/src/product-catalog` where the sorce code of product catalog is available and create the docker file, run `vim Dokerfile`.
+- 
+
 ___
 ## Docker Compose
 
