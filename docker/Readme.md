@@ -15,6 +15,8 @@ Will be Writing the docker file for the 3 Microservices to understand the struct
 
 ## Docker file for _Product Catalog_ service  - 
 
+[Product catalog is based on Go lang.]
+
 - Get into the directory `ultimate-devops—project—demo/src/product-catalog` where the sorce code of product catalog is available and create the docker file, run `vim Dokerfile`.
 - 
 
