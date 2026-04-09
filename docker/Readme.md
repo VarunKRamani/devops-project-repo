@@ -42,10 +42,15 @@ FROM alpine:latest                                       #Starts a brand new ima
 WORKDIR /usr/src/app/                                    #Directory where the app will live and run
 COPY ——from=builder /usr/src/app/product—catalog/        #Copies the compiled binary, From the builder stage into Runtime stage. This is the bridge between stages.
 COPY . / products/ . / products/                         #Copies static data files required by the service.
-ENV PRODUCT_CATALOG_PORT=8088                            #Setting the environment variable or mapping a service to port 8088
+ENV PRODUCT_CATALOG_PORT=8088                            #This sets an environment variable inside the container.
 ENTRYPOINT ["./product—catalog" ]                        #This is the command that runs when the container starts. 
 ```
-
+____
+## Docker file for _Ad_ service
+A java based Micro Service 
+```
+Code
+```
 ___
 ## Docker Compose
 
