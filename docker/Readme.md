@@ -95,6 +95,18 @@ COPY . .                                                   #Copy Entire applicat
 ENTRYPOINT ["python", "recommendation_server.py"]          #Define the default command to run when container starts. 
 ```
 ___
+
+## Docker init 
+`docker init` is a command in Docker that helps you quickly set up a project to run inside a container.
+Docker Init is used to write docker files quickly, For a service with any coded language.
+
+____
+## DockerHub 
+A container Registry/Artifact platform where the containers are stored in a centralized location.
+Using the command `docker push`, the container can be pussed to these centralized locations.
+
+
+____
 ## Docker Compose
 
 A platform used to run multiple docker files at once. 
