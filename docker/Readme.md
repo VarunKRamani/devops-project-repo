@@ -103,9 +103,13 @@ Docker Init is used to write docker files quickly, For a service with any coded 
 ____
 ## DockerHub 
 A container Registry/Artifact platform where the containers are stored in a centralized location.
+
 Using the command `docker push`, the container can be pussed to these centralized locations.
 
-
+- Login to the Container registry, in our case dockerhub, run `docker login docker.io`
+- A URL will be provided and the activation **Token** on the terminal, o/p --> 'Press ENTER to open your browser or submit your device code here: https://loqin.docker.com/activate'
+- Get the URL and go to browser and enter the token. o/p --> 'Login Successful'
+- `docker push docker.io/UserName/ReponameInDockerHub:tag`, the image with the same name should be built first to push it to the dockerhub.
 ____
 ## Docker Compose
 
