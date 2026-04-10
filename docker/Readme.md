@@ -46,10 +46,43 @@ ENV PRODUCT_CATALOG_PORT=8088                            #This sets an environme
 ENTRYPOINT ["./product—catalog" ]                        #This is the command that runs when the container starts. 
 ```
 ____
+
 ## Docker file for _Ad_ service
 A java based Micro Service 
+
 ```
-Code
+# ------------------------------------------- Build stage -------------------------------------------
+FROM eclipse-temurin:21-jdk AS builder                    #Uses the full jdk image, cause we need java+gradle to build this application  
+WORKDIR /usr/src/app                                      #Creates /usr/src/app inside the container and Moves into it
+
+COPY gradlew* settings.gradle* build.gradle .             #Copy Gradle wrapper and build configuration files first
+COPY ./gradle ./gradle                                    #Copy Gradle wrapper support files. Gradle uses these files to download and manage dependencies
+
+RUN chmod +x ./gradlew                                    #Make the Gradle wrapper executable, linux containers needs executable permissions to run scripts.
+RUN ./gradlew downloadRepos                               #Download all project dependencies ahead of time.
+
+COPY . .                                                  #Copy the full application source code into the container, includes Java source files and resources.
+COPY ./pb ./proto                                         #Copy protobuf definitions into a folder called proto. These files are used to generate gRPC code during build
+
+RUN ./gradlew installDist -PprotoSourceDir=./proto        #Build the application and generate a distributable package
+                                                          #installDist creates a runnable folder with binaries and libraries
+                                                          # -PprotoSourceDir tells Gradle where the proto files exist
+
+# ------------------------------------------ Runtime stage ------------------------------------------
+FROM eclipse-temurin:21-jre                               #Use a smaller JRE image for runtime only. This reduces image size and improves security (no compiler tools inside)
+WORKDIR /usr/src/app                                      #Set the working directory for  runtime container
+
+COPY --from=builder /usr/src/app ./                       #Copy only the built application from the builder stage. Avoiding build tools and source code in runtime image
+
+ENV AD_PORT=9099                                                   #This Sets the ENV variable inside the container.
+ENTRYPOINT ["./build/install/opentelemetry-demo-ad/bin/Ad"]        #This defines startUp command for the container, launcher the Ad serivce binary. 
+```
+___
+## Docker file for _Recommendation_ service
+A python based Mico Service 
+
+```
+code
 ```
 ___
 ## Docker Compose
