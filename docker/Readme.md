@@ -15,7 +15,7 @@ Will be Writing the docker file for the 3 Microservices to understand the struct
 
 ## Docker file for _Product Catalog_ service  - 
 
-[Product catalog is based on Go lang.]
+Product catalog is based on Go lang.
 
 - Get into the directory `ultimate-devops—project—demo/src/product-catalog` where the sorce code of product catalog is available and create the docker file, run `vim Dokerfile`.
 - The Docker file is written on the bases of documentation provided by developer.
@@ -47,8 +47,8 @@ ENTRYPOINT ["./product—catalog" ]                        #This is the command 
 ```
 ____
 
-## Docker file for _Ad_ service
-A java based Micro Service 
+## Docker file for _Ad_ service -
+A Java based Micro Service 
 
 ```
 # ------------------------------------------- Build stage -------------------------------------------
@@ -78,11 +78,21 @@ ENV AD_PORT=9099                                                   #This Sets th
 ENTRYPOINT ["./build/install/opentelemetry-demo-ad/bin/Ad"]        #This defines startUp command for the container, launcher the Ad serivce binary. 
 ```
 ___
-## Docker file for _Recommendation_ service
-A python based Mico Service 
+## Docker file for _Recommendation_ service -
+A Python based Mico Service 
 
 ```
-code
+FROM python:3.12-slim-bookworm AS base                     #Use official Python base image
+WORKDIR /usr/src/app                                       #Create /usr/src/app inside the container and move into it
+
+COPY requirements.txt ./                                   #Copy Requriments.txt file into the container.
+
+RUN pip install --upgrade pip                              #Upgrade pip, and install all the dependencies listed in requriments.txt file.
+RUN pip install -r requirements.txt
+
+COPY . .                                                   #Copy Entire application
+
+ENTRYPOINT ["python", "recommendation_server.py"]          #Define the default command to run when container starts. 
 ```
 ___
 ## Docker Compose
