@@ -124,4 +124,8 @@ We can say. **Docker Compose is a tool used to run multiple containers together 
 
 **Writing a Docker compose file i.e. `.yaml` file for docker compose.**
 
+- We need to write 3 main/primary objects : **Services, Network and Volumes**.
+- **Service**: The services object defines all the containers in an application. Each service represents a container with its own configuration like image, ports, environment variables, and volumes.
+- **Network**: Networks defines how containers (services) communicate with each other, if not definerd, Docker Compose: Creates a default network and Connects all services to it. We define custom networks for isolation and better control.
+- **Vloumes**: volumes are used to persist data outside the container. By default Containers are ephemeral (temporary), If container is deleted the data is gone. Volumes fix this issue, Data stays even if container is removed.
 
