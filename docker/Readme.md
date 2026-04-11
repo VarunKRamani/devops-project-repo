@@ -113,4 +113,15 @@ Using the command `docker push`, the container can be pussed to these centralize
 ____
 ## Docker Compose
 
-A platform used to run multiple docker files at once. 
+A tool used to run multiple docker files at once. 
+
+Specifically used when multiple services of a application have to be run at once, in out case there about 20 micro services that have to be run, so we use **Docker Compose**. By running a single command we can pull multiple images and run. 
+
+## How Docker Compose work?
+
+In docker compose we write a `.yaml` file let's say like `CompleteDocker.yaml` or `FullDocker.yaml`, which will be run. 
+We can say. **Docker Compose is a tool used to run multiple containers together using a single YAML file.**
+
+**Writing a Docker compose file i.e. `.yaml` file for docker compose.**
+
+
