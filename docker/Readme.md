@@ -129,3 +129,10 @@ We can say. **Docker Compose is a tool used to run multiple containers together 
 - **Network**: Networks defines how containers (services) communicate with each other, if not definerd, Docker Compose: Creates a default network and Connects all services to it. We define custom networks for isolation and better control.
 - **Vloumes**: volumes are used to persist data outside the container. By default Containers are ephemeral (temporary), If container is deleted the data is gone. Volumes fix this issue, Data stays even if container is removed.
 
+
+**`Docker-Compose.yaml` file is added to `/docker` directory.**
+There is a parent object for networks(bridge type of network), a Section for each service is defined. Service dependency are defined where needed.
+
+- Get into the directory, run `docker compose down` to remove any containers.
+- **Run `docker compose up -d`.**
+- Access the project frontend, using **localhost**. 
