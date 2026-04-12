@@ -103,10 +103,29 @@ Docker Init is used to write docker files quickly, For a service with any coded 
 ____
 ## DockerHub 
 A container Registry/Artifact platform where the containers are stored in a centralized location.
+
 Using the command `docker push`, the container can be pussed to these centralized locations.
 
-
+- Login to the Container registry, in our case dockerhub, run `docker login docker.io`
+- A URL will be provided and the activation **Token** on the terminal, o/p --> 'Press ENTER to open your browser or submit your device code here: https://loqin.docker.com/activate'
+- Get the URL and go to browser and enter the token. o/p --> 'Login Successful'
+- `docker push docker.io/UserName/ReponameInDockerHub:tag`, the image with the same name should be built first to push it to the dockerhub.
 ____
 ## Docker Compose
 
-A platform used to run multiple docker files at once. 
+A tool used to run multiple docker files at once. 
+
+Specifically used when multiple services of a application have to be run at once, in out case there about 20 micro services that have to be run, so we use **Docker Compose**. By running a single command we can pull multiple images and run. 
+
+## How Docker Compose work?
+
+In docker compose we write a `.yaml` file let's say like `CompleteDocker.yaml` or `FullDocker.yaml`, which will be run. 
+We can say. **Docker Compose is a tool used to run multiple containers together using a single YAML file.**
+
+**Writing a Docker compose file i.e. `.yaml` file for docker compose.**
+
+- We need to write 3 main/primary objects : **Services, Network and Volumes**.
+- **Service**: The services object defines all the containers in an application. Each service represents a container with its own configuration like image, ports, environment variables, and volumes.
+- **Network**: Networks defines how containers (services) communicate with each other, if not definerd, Docker Compose: Creates a default network and Connects all services to it. We define custom networks for isolation and better control.
+- **Vloumes**: volumes are used to persist data outside the container. By default Containers are ephemeral (temporary), If container is deleted the data is gone. Volumes fix this issue, Data stays even if container is removed.
+
