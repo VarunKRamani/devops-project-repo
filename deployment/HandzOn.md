@@ -20,4 +20,19 @@ ____
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/afb9ee1e-59fb-4698-ac2a-1285c1459fb1" />
 ____
 ## Creation of Infrastructure
-- 
+
+- The Resource/Infrastructure requried are created using Terraform. Get into directory '~/Desktop/ Terraform'.
+
+<img width="800" height="600" alt="Screenshot 2026-04-17 143100" src="https://github.com/user-attachments/assets/c0cb5cd0-dccf-4543-b3b5-3483b655d036" />
+
+- Once the initialization is done, `terraform plan` is ran.
+
+<img width="800" height="600" alt="Screenshot 2026-04-17 143155" src="https://github.com/user-attachments/assets/d22b912d-4f10-4e2b-8294-7e3a16598219" />
+
+<img width="800" height="600" alt="Screenshot 2026-04-17 143235" src="https://github.com/user-attachments/assets/91dbaf88-9352-4d8d-87a0-c0fc28c7fefd" />
+
+- Now run `terraform apply`, to actully create resources in AWS.
+
+
+
+
