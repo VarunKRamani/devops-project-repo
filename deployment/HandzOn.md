@@ -18,7 +18,9 @@ ____
 <img width="800" height="600" alt="Screenshot 2026-04-15 144215" src="https://github.com/user-attachments/assets/263a7b98-f096-4bd5-b1de-c399487295fa" />
 
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/afb9ee1e-59fb-4698-ac2a-1285c1459fb1" />
+
 ____
+
 ## Creation of Infrastructure
 
 - The Resource/Infrastructure requried are created using Terraform. Get into directory '~/Desktop/ Terraform'.
@@ -29,10 +31,16 @@ ____
 
 <img width="800" height="600" alt="Screenshot 2026-04-17 143155" src="https://github.com/user-attachments/assets/d22b912d-4f10-4e2b-8294-7e3a16598219" />
 
+- During the plan the state lock is acquried. 
+
 <img width="800" height="600" alt="Screenshot 2026-04-17 143235" src="https://github.com/user-attachments/assets/91dbaf88-9352-4d8d-87a0-c0fc28c7fefd" />
 
-- Now run `terraform apply`, to actully create resources in AWS.
+- Now run `terraform apply`, to actually create resources in AWS.
 
+<img width="800" height="600" alt="Screenshot 2026-04-22 112418" src="https://github.com/user-attachments/assets/dbfa3116-2124-40c1-81d5-a054a61bb28b" />
 
+- 32 Resources created/added. State lock released once the resource creation is completed.
+
+<img width="800" height="180" alt="Screenshot 2026-04-22 113722" src="https://github.com/user-attachments/assets/02230149-ced0-4de3-95d4-f7f7cac22a33" />
 
 
