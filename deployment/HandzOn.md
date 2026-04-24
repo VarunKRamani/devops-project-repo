@@ -43,4 +43,25 @@ ____
 
 <img width="800" height="180" alt="Screenshot 2026-04-22 113722" src="https://github.com/user-attachments/assets/02230149-ced0-4de3-95d4-f7f7cac22a33" />
 
+____
+## Connecting to the cluster and deploying the project(Ingress)
+
+- Run `aws update-kubeconfig --region us-west-2 --name cluster_name`, o/p --> 'Added new context ___-'
+- Check if connect to EKS cluster, run `kubectl config current-context`, o/p --> 'displays the cluster name'
+- Get into to the directory '~/ultimate-devops-project-demo/kubernetes'.
+- Create a Service account,there is a .yaml file. Run `kubectl apply -f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry-demo created'
+- To check, run `kubectl get sa`, o/p --> table with default service account and the created service account 'opentelemetry-demo' with AGE will be displayed.
+- Now, run the 'complete-deploy.yaml' file to up all the services, run `kubectl apply -f complete-deploy.yaml`. The services will start getting created then deployments.
+- To check, run `kubectl get pods`. **Wait until the status of all the pods come to 'Running'.**
+- Check the same for services, run `kubectl get svc`. With the type 'ClusterIP'. Can use `kubectl get all` to list both services and pods.
+
+## Accessing the project 
+- To Access FrontEnd, we need to change the service type of the frontendproxy, run `kubectl get svc | grep frontendproxy`.
+- Run `kubectl edit svc opentelemetry-demo-frontendproxy`, change the type to `LoadBalancer`. **save and Wait for 5-10 min atleast.**
+- Check the AWS console if the Load Balancer is created, and get the DNS once created. or copy idt from the terminal, for that run `kubectl get svc opentelemetry-demo-frontendproxy`. The port is `8080`.
+- Browse `DNS:port`, Will be able to access the frontend.
+🎉😃🥳
+
+## Ingress **
+
 
