@@ -69,4 +69,6 @@ ____
 - Fetch the OIDC Id, run `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | '/' -f 5)`
 - Now run `echo $oidc_id`. O/p --> oids id. 
 - Now we will associate IAM oidc provider with the cluster(adding oidc provider to the cluster), run `eksctl utils associate-iam-oid-provider --cluster $cluster_name --approve`
-- 
+- Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes—sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
+- Create the policy, run `aws xam create-policy --policy—name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
+- Assign IAM role to the service account, 
