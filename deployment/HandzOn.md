@@ -64,4 +64,9 @@ ____
 
 ## Ingress **
 
-
+- Quick check, run `kubectl config current-context`.
+- Export the cluster name, run `export cluster_name=my-eks-cluster`
+- Fetch the OIDC Id, run `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | '/' -f 5)`
+- Now run `echo $oidc_id`. O/p --> oids id. 
+- Now we will associate IAM oidc provider with the cluster(adding oidc provider to the cluster), run `eksctl utils associate-iam-oid-provider --cluster $cluster_name --approve`
+- 
