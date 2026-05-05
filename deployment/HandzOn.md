@@ -70,5 +70,24 @@ ____
 - Now run `echo $oidc_id`. O/p --> oids id. 
 - Now we will associate IAM oidc provider with the cluster(adding oidc provider to the cluster), run `eksctl utils associate-iam-oid-provider --cluster $cluster_name --approve`
 - Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes—sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
-- Create the policy, run `aws xam create-policy --policy—name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
-- Assign IAM role to the service account, 
+- Create the policy, run `aws iam create-policy --policy—name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
+- Assign IAM role to the service account, run `eksctl create iamserviceaccount \
+--cluster=<your-cluster-name> \
+--namespace=kube—system \
+--name=aws-load-balancer-controller \
+--role-name AmazonEKSLoadBalncerControllerRole \
+--attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+--approve`. Provide the AWS ID and Cluster name.
+_____
+- Install helm.
+- Run `helm repo add eks https://aws.github.io/eks-charts`.
+- To install ALB Controller, run `helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+-n kube-system \
+--set clusterName=<your-cluster-name> \
+--set serviceAccount.create=fa1se \
+--set serviceAccount.name=aws-load-ba1ancer—contr011er \
+--set region=<region> \
+--set vpcId=<your-vpc-id>`.
+Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
+- Verify if the ALB pods are up and running, run `kubectl get pods -n kube-system`. The formed pords(2) should be in 'Running' state/status.
+- Can check the logs to further verify, run `kubectl logs <pod name> -n kube-system`. No error -> ALB controller installation is successful.
