@@ -62,6 +62,8 @@ ____
 - Browse `DNS:port`, Will be able to access the frontend.
 🎉😃🥳
 
+**NOTE : - Change the service type of frontendProxy back to 'Nodeport'. Run `kubectl edit svc opentelemetry-demo-frontendproxy` in it change the type to `NodePort`.** and loadbalancer = money. 
+
 ## Ingress **
 
 - Quick check, run `kubectl config current-context`.
@@ -91,3 +93,11 @@ _____
 Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
 - Verify if the ALB pods are up and running, run `kubectl get pods -n kube-system`. The formed pords(2) should be in 'Running' state/status.
 - Can check the logs to further verify, run `kubectl logs <pod name> -n kube-system`. No error -> ALB controller installation is successful.
+____
+**Ingress resource creation--**
+- Change the service type of frontendProxy back to 'Nodeport'. Run `kubectl edit svc opentelemetry-demo-frontendproxy` in it change the type to `NodePort`. **Done after accesing the project.** The loadbalancer once the service type is changed will get deleted automatically. 
+- Get into directory `~/ultimate-devops-project-demo/kubernetes/frontendproxy$`. Create ingress.yaml file.
+- Run, `kubectl apply -f ingress.yaml`. o/p --> 'ingress.networking.k8s.io/frontend—proxy created'
+- Run, `kubectl get ing`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
+- 
+- 
