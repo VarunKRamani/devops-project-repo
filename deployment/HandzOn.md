@@ -62,6 +62,45 @@ ____
 - Browse `DNS:port`, Will be able to access the frontend.
 🎉😃🥳
 
+**NOTE : - Change the service type of frontendProxy back to 'Nodeport'. Run `kubectl edit svc opentelemetry-demo-frontendproxy` in it change the type to `NodePort`.** and loadbalancer = money. 
+
 ## Ingress **
 
+- Quick check, run `kubectl config current-context`.
+- Export the cluster name, run `export cluster_name=my-eks-cluster`
+- Fetch the OIDC Id, run `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | '/' -f 5)`
+- Now run `echo $oidc_id`. O/p --> oids id. 
+- Now we will associate IAM oidc provider with the cluster(adding oidc provider to the cluster), run `eksctl utils associate-iam-oid-provider --cluster $cluster_name --approve`
+- Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes—sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
+- Create the policy, run `aws iam create-policy --policy—name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
+- Assign IAM role to the service account, run `eksctl create iamserviceaccount \
+--cluster=<your-cluster-name> \
+--namespace=kube—system \
+--name=aws-load-balancer-controller \
+--role-name AmazonEKSLoadBalncerControllerRole \
+--attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+--approve`. Provide the AWS ID and Cluster name.
+_____
+- Install helm.
+- Run `helm repo add eks https://aws.github.io/eks-charts`.
+- To install ALB Controller, run `helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+-n kube-system \
+--set clusterName=<your-cluster-name> \
+--set serviceAccount.create=fa1se \
+--set serviceAccount.name=aws-load-ba1ancer—contr011er \
+--set region=<region> \
+--set vpcId=<your-vpc-id>`.
+Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
+- Verify if the ALB pods are up and running, run `kubectl get pods -n kube-system`. The formed pords(2) should be in 'Running' state/status.
+- Can check the logs to further verify, run `kubectl logs <pod name> -n kube-system`. No error -> ALB controller installation is successful.
+____
+**Ingress resource creation--**
+- Change the service type of frontendProxy back to 'Nodeport'. Run `kubectl edit svc opentelemetry-demo-frontendproxy` in it change the type to `NodePort`. **Done after accesing the project.** The loadbalancer once the service type is changed will get deleted automatically. 
+- Get into directory `~/ultimate-devops-project-demo/kubernetes/frontendproxy$`. Create ingress.yaml file.
+- Run, `kubectl apply -f ingress.yaml`. o/p --> 'ingress.networking.k8s.io/frontend—proxy created'
+- Run, `kubectl get ing`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
+- As the `host` in ingress file is set as 'example.com', by browsing the ip or the DNS we cannot access the project. So, we will set the ip to the domain within out locak DNS records. 
+- Get the Ip by running, `nslookup <dns-name-from-loadbalancer>`. In the local machine run `sudo vim /etc/hosts`, where we will write a dns record `IpAdress example.com` and save.
+- Now browse 'example.com' and will be able to access the frontend.
 
+🎉😃🥳😃
