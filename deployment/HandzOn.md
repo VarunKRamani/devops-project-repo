@@ -99,5 +99,8 @@ ____
 - Get into directory `~/ultimate-devops-project-demo/kubernetes/frontendproxy$`. Create ingress.yaml file.
 - Run, `kubectl apply -f ingress.yaml`. o/p --> 'ingress.networking.k8s.io/frontend—proxy created'
 - Run, `kubectl get ing`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
-- 
-- 
+- As the `host` in ingress file is set as 'example.com', by browsing the ip or the DNS we cannot access the project. So, we will set the ip to the domain within out locak DNS records. 
+- Get the Ip by running, `nslookup <dns-name-from-loadbalancer>`. In the local machine run `sudo vim /etc/hosts`, where we will write a dns record `IpAdress example.com` and save.
+- Now browse 'example.com' and will be able to access the frontend.
+
+🎉😃🥳😃
