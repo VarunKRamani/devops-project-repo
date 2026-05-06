@@ -104,3 +104,9 @@ ____
 - Now browse 'example.com' and will be able to access the frontend.
 
 🎉😃🥳😃
+
+_____
+
+## CICD 
+
+- 
