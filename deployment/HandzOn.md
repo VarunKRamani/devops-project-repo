@@ -6,7 +6,7 @@
 <img width="700" height="400" alt="Screenshot 2026-04-15 132103" src="https://github.com/user-attachments/assets/01781d08-deae-4ca8-a114-a4bd6cd6689e" />
 
 - The Alerts have been set, basing on the resource usage the cost will climb and will be notified if corsses the set limit. 
-<img width="800" height="350" alt="Screenshot 2026-04-15 132519" src="https://github.com/user-attachments/assets/5a0ccc95-4072-4498-b9c3-da75b59272ac" />
+<img width="800" height="250" alt="Screenshot 2026-04-15 132519" src="https://github.com/user-attachments/assets/5a0ccc95-4072-4498-b9c3-da75b59272ac" />
 
 ____
 ## Creation of S3 and DynamoDB for State Locking -
@@ -46,14 +46,35 @@ ____
 ____
 ## Connecting to the cluster and deploying the project(Ingress)
 
-- Run `aws update-kubeconfig --region us-west-2 --name cluster_name`, o/p --> 'Added new context ___-'
+- Run `aws eks update-kubeconfig --region us-west-2 --name cluster_name`, o/p --> 'Added new context ___-'
 - Check if connect to EKS cluster, run `kubectl config current-context`, o/p --> 'displays the cluster name'
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 113436" src="https://github.com/user-attachments/assets/89539838-4435-4344-a2da-07751ae40389" />
+
 - Get into to the directory '~/ultimate-devops-project-demo/kubernetes'.
 - Create a Service account,there is a .yaml file. Run `kubectl apply -f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry-demo created'
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 113653" src="https://github.com/user-attachments/assets/254ac782-fc7b-4768-8a09-45e59544883c" />
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 113901" src="https://github.com/user-attachments/assets/7d3ffc4e-77a0-4c75-b791-aeee7fa736ff" />
+
 - To check, run `kubectl get sa`, o/p --> table with default service account and the created service account 'opentelemetry-demo' with AGE will be displayed.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 113942" src="https://github.com/user-attachments/assets/aab88eb4-650a-4463-aa3f-1012e36f169c" />
+
 - Now, run the 'complete-deploy.yaml' file to up all the services, run `kubectl apply -f complete-deploy.yaml`. The services will start getting created then deployments.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 114143" src="https://github.com/user-attachments/assets/3f95e62c-09f9-4c20-a75c-42271b64558a" />
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 114128" src="https://github.com/user-attachments/assets/4366dba2-4218-4707-99c7-b3414f5c11c7" />
+
 - To check, run `kubectl get pods`. **Wait until the status of all the pods come to 'Running'.**
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 114239" src="https://github.com/user-attachments/assets/432a4c36-ad31-45e5-982c-b3cb65f3387b" />
+
 - Check the same for services, run `kubectl get svc`. With the type 'ClusterIP'. Can use `kubectl get all` to list both services and pods.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 114356" src="https://github.com/user-attachments/assets/47cf6eaa-f5c7-417d-a54b-ad7b836526e0" />
 
 ## Accessing the project 
 - To Access FrontEnd, we need to change the service type of the frontendproxy, run `kubectl get svc | grep frontendproxy`.
@@ -67,12 +88,27 @@ ____
 ## Ingress **
 
 - Quick check, run `kubectl config current-context`.
+
 - Export the cluster name, run `export cluster_name=my-eks-cluster`
+
 - Fetch the OIDC Id, run `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | '/' -f 5)`
-- Now run `echo $oidc_id`. O/p --> oids id. 
+
+- Now run `echo $oidc_id`. O/p --> oids id.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 115731" src="https://github.com/user-attachments/assets/3ffc7e2d-97f5-48db-a48c-a52ca6e0a0c2" />
+
 - Now we will associate IAM oidc provider with the cluster(adding oidc provider to the cluster), run `eksctl utils associate-iam-oid-provider --cluster $cluster_name --approve`
-- Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes—sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
-- Create the policy, run `aws iam create-policy --policy—name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 120634" src="https://github.com/user-attachments/assets/21525b4c-3596-4e6d-a97f-3b568da45bda" />
+
+- Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 121251" src="https://github.com/user-attachments/assets/25739a8d-14a5-43d6-bdbf-37c58553dcb7" />
+
+- Create the policy, run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 121251" src="https://github.com/user-attachments/assets/da541f9a-6fc7-4432-94ba-67e8b4123bf6" />
+
 - Assign IAM role to the service account, run `eksctl create iamserviceaccount \
 --cluster=<your-cluster-name> \
 --namespace=kube—system \
@@ -80,9 +116,15 @@ ____
 --role-name AmazonEKSLoadBalncerControllerRole \
 --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
 --approve`. Provide the AWS ID and Cluster name.
+
 _____
 - Install helm.
+<img width="800" height="600" alt="Screenshot 2026-05-08 122829" src="https://github.com/user-attachments/assets/1a079cf7-7a0b-4042-83d5-0e96f8346ea4" />
+
 - Run `helm repo add eks https://aws.github.io/eks-charts`.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 123056" src="https://github.com/user-attachments/assets/2bccab9c-80fb-4b17-ae53-66d77ce9064c" />
+
 - To install ALB Controller, run `helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 -n kube-system \
 --set clusterName=<your-cluster-name> \
@@ -91,22 +133,41 @@ _____
 --set region=<region> \
 --set vpcId=<your-vpc-id>`.
 Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 125212" src="https://github.com/user-attachments/assets/ff18a302-b8bc-4b19-81ac-95818f8ab68e" />
+
 - Verify if the ALB pods are up and running, run `kubectl get pods -n kube-system`. The formed pords(2) should be in 'Running' state/status.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 125254" src="https://github.com/user-attachments/assets/e00a4494-8d1a-4a22-8257-51ef932cbf84" />
+
 - Can check the logs to further verify, run `kubectl logs <pod name> -n kube-system`. No error -> ALB controller installation is successful.
 ____
 **Ingress resource creation--**
-- Change the service type of frontendProxy back to 'Nodeport'. Run `kubectl edit svc opentelemetry-demo-frontendproxy` in it change the type to `NodePort`. **Done after accesing the project.** The loadbalancer once the service type is changed will get deleted automatically. 
+- Change the service type of frontendProxy back to 'Nodeport'. Run `kubectl edit svc opentelemetry-demo-frontendproxy` in it change the type to `NodePort`. **Done after accesing the project.** The loadbalancer once the service type is changed will get deleted automatically.
+
 - Get into directory `~/ultimate-devops-project-demo/kubernetes/frontendproxy$`. Create ingress.yaml file.
+
 - Run, `kubectl apply -f ingress.yaml`. o/p --> 'ingress.networking.k8s.io/frontend—proxy created'
+
 - Run, `kubectl get ing`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
-- As the `host` in ingress file is set as 'example.com', by browsing the ip or the DNS we cannot access the project. So, we will set the ip to the domain within out locak DNS records. 
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 130912" src="https://github.com/user-attachments/assets/cd85aa5c-14a7-4312-aedb-ced1f7b863ce" />
+
+- As the `host` in ingress file is set as 'example.com', by browsing the ip or the DNS we cannot access the project. So, we will set the ip to the domain within out locak DNS records.
+
 - Get the Ip by running, `nslookup <dns-name-from-loadbalancer>`. In the local machine run `sudo vim /etc/hosts`, where we will write a dns record `IpAdress example.com` and save.
+
+<img width="800" height="600" alt="Screenshot 2026-05-08 132110" src="https://github.com/user-attachments/assets/dec660b1-ba92-4100-930a-532ab874386a" />
+
 - Now browse 'example.com' and will be able to access the frontend.
 
-🎉😃🥳😃
+<img width="800" height="600" alt="Screenshot 2026-05-08 132333" src="https://github.com/user-attachments/assets/5a30522d-930a-411f-a9c9-51ea7753060d" />
 
+<img width="800" height="600" alt="Screenshot 2026-05-08 132428" src="https://github.com/user-attachments/assets/5151c8fc-e936-4d82-a834-d5ebc7fff5d0" />
+
+🎉😃🥳😃
 _____
 
 ## CICD 
 
-- 
+- -- --- ---- -----
