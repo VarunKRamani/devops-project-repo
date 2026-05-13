@@ -169,5 +169,16 @@ ____
 _____
 
 ## CICD 
+GitHub Actions used for **CI**, Implementing CI for a microservice.
+- Once the directory and ci.yaml file is created. The exp of ci.yaml is in /CICD/Readme.md
+- Create a branch, run `git checkout -b githubcicheck`. o/p --> Switched to a new branch 'githubcicheck'.
+- We will create a change in the code i.e. in '/src/product-catalog/main.go' like add a comment.
+- Check the change, run `git status`.
+-  Add, run `git add.`. Commit, run `git commit -am "chore: verify github actions"`
+-  Push the changes, run `git push origin githubcicheck`. get the **url** generated for pull request, browse it pull it on the out repo and create a pull request.
+-  Now we see 4 jobs as we created namely - build, codequality, docker and updatek8s.
+-  Once all the 4 jobs are done, the pull request is closed.
 
-- -- --- ---- -----
+-------------------------------------------------------------------------------------
+CD with GitOps
+-  
