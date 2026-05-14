@@ -169,5 +169,24 @@ ____
 _____
 
 ## CICD 
+GitHub Actions used for **CI**, Implementing CI for a microservice.
+- Once the directory and ci.yaml file is created. The exp of ci.yaml is in /CICD/Readme.md
+- Create a branch, run `git checkout -b githubcicheck`. o/p --> Switched to a new branch 'githubcicheck'.
+- We will create a change in the code i.e. in '/src/product-catalog/main.go' like add a comment.
+- Check the change, run `git status`.
+-  Add, run `git add.`. Commit, run `git commit -am "chore: verify github actions"`
+-  Push the changes, run `git push origin githubcicheck`. get the **url** generated for pull request, browse it pull it on the out repo and create a pull request.
+-  Now we see 4 jobs as we created namely - build, codequality, docker and updatek8s.
+-  Once all the 4 jobs are done, the pull request is closed.
 
-- -- --- ---- -----
+-------------------------------------------------------------------------------------
+CD with GitOps
+
+Once the kubernetes manifest is updated by CI, CD starts from updated kubernetes manifest.
+
+GitOps is an approach where the kubernetes manifest, which got updated by the CI stage, is stored in a version control system like git. The CD platform like Argo CD will read these changes and deploy them onto target platform like kubernetes.
+
+- Git as version control system and deploying them on kubernetes cluster.
+- Constant monitoring of the version control system to verify if there is a new image, and once there is a new image, this will automatically deploy to the cluster.
+- Reconciliation of state. That is, if something is modified on kubernetes cluster, now Argo CD or GitOps immediately looks at this change and overrides that to the previous state because, in the concept of GitOps, **version control system is the source of truth**.
+- Any manual changes onto the cluster or anything changing abruptly. The state maintained by Argo will again deploy the existing version from version control system.
