@@ -186,6 +186,7 @@ Once the kubernetes manifest is updated by CI, CD starts from updated kubernetes
 
 GitOps is an approach where the kubernetes manifest, which got updated by the CI stage, is stored in a version control system like git. The CD platform like Argo CD will read these changes and deploy them onto target platform like kubernetes.
 
+- Install Argo CD. To check, run `kubectl get pods -n argocd`
 - Git as version control system and deploying them on kubernetes cluster.
 - Constant monitoring of the version control system to verify if there is a new image, and once there is a new image, this will automatically deploy to the cluster.
 - Reconciliation of state. That is, if something is modified on kubernetes cluster, now Argo CD or GitOps immediately looks at this change and overrides that to the previous state because, in the concept of GitOps, **version control system is the source of truth**.
