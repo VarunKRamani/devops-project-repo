@@ -9,6 +9,10 @@
 <img width="800" height="250" alt="Screenshot 2026-04-15 132519" src="https://github.com/user-attachments/assets/5a0ccc95-4072-4498-b9c3-da75b59272ac" />
 
 ____
+**Prerequisites for the deployment--**
+- Base Environment --> Ubuntu VM (VirtualBox) or Linux system
+- Installed tools: AWS CLI, Terraform, Kubectl, Docker, eksctl, helm, AWS Configuration - `aws configure`.
+____
 ## Creation of S3 and DynamoDB for State Locking -
 - Backend configuration wrt terraform, Creation of S3 and DynamoDB.
 - The S3 bucker name has been updated wrt to the terraform file and it's 'demo-terraform-aws-varu-eks-state-s3-bucket'
@@ -18,9 +22,7 @@ ____
 <img width="800" height="600" alt="Screenshot 2026-04-15 144215" src="https://github.com/user-attachments/assets/263a7b98-f096-4bd5-b1de-c399487295fa" />
 
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/afb9ee1e-59fb-4698-ac2a-1285c1459fb1" />
-
 ____
-
 ## Creation of Infrastructure
 
 - The Resource/Infrastructure requried are created using Terraform. Get into directory '~/Desktop/ Terraform'.
