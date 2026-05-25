@@ -6,6 +6,13 @@
 - What was investigated: The root cause was the helm version that was being used was version 2.x.x  which does not support AWS LBb controller.
 - Where AWS Load Balancer Controller charts require Helm v3. Modern Kubernetes Helm charts are designed around Helm v3 behavior.
 - To fix this issue, helm v2.x.x was removed, installed v3, Re-added repo, update repo and re-ran installation.
+
+<img width="800" height="600" alt="Screenshot 2026-05-25 091922" src="https://github.com/user-attachments/assets/f8655e6c-b1bc-462b-ac55-d010738c2606" />
+
+<img width="800" height="600" alt="Screenshot 2026-05-25 091945" src="https://github.com/user-attachments/assets/dd62ce74-1bef-44f4-8ea8-2bfb7c51eb82" />
+
+<img width="800" height="600" alt="Screenshot 2026-05-25 092037" src="https://github.com/user-attachments/assets/4a900acb-95d9-439b-b202-6430ccfdfb41" />
+
 ____
 **Cutting off the resources.**
 - Once the project was deployed, the resources were destroyed.
