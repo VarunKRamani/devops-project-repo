@@ -173,6 +173,9 @@ _____
 ## CICD 
 GitHub Actions used for **CI**, Implementing CI for a microservice.
 - Once the directory and ci.yaml file is created. The exp of ci.yaml is in /CICD/Readme.md
+- Started by creating repo's Actions secrets. **New Repository Secrat** , Add DOCKER_USERNAME and DOCKER_TOKEN.
+<img width="750" height="500" alt="image" src="https://github.com/user-attachments/assets/bc4ae610-a08a-42ba-aa95-8759e9c7fb5f" />
+
 - Create a branch, run `git checkout -b githubcicheck`. o/p --> Switched to a new branch 'githubcicheck'.
 - We will create a change in the code i.e. in '/src/product-catalog/main.go' like add a comment.
 - Check the change, run `git status`.
