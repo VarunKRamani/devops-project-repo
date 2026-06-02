@@ -184,11 +184,13 @@ GitHub Actions used for **CI**, Implementing CI for a microservice.
 - Check the change, run `git status`.
 -  Add, run `git add.`. Commit, run `git commit -am "chore: verify github actions"`
 -  Push the changes, run `git push origin githubcicheck`. get the **url** generated for pull request, browse it pull it on the out repo and create a pull request.
--  Now we see 4 jobs as we created namely - build, codequality, docker and updatek8s.
+-  Now we see 4 jobs as we created namely - build, codeQuality, docker and updatek8s.
+-  Updatek8s is the bridge between CI and ArgoCD. 
+-  Takes the newly built Docker image tag and update the Kubernetes deployment manifest in Git so that ArgoCD can deploy the new version automatically.
 -  Once all the 4 jobs are done, the pull request is closed.
 
 -------------------------------------------------------------------------------------
-CD with GitOps
+# CD with GitOps
 
 Once the kubernetes manifest is updated by CI, CD starts from updated kubernetes manifest.
 
