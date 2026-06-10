@@ -205,3 +205,19 @@ GitOps is an approach where the kubernetes manifest, which got updated by the CI
 - Run the .yaml file provided by argocd, run `https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`.
 - Run `kubectl get pods -n argocd`. List of pods and let be in running state.
 - Run `kubectl get svc -n argocd`. Take a look at `argocd-server` which hosts the UI of ArgoCD.
+- Run `kubectl edit svc argocd-server -n argocd`. Change the type to loadbalancer `type: LoadBalancer` and save it. o/p --> service/argocd—server edited.
+- Run `kubectl get svc -n argocd`. Check if the loadbalancer service type is created. (Wait for few min until the service is created)
+- Once the ArgoCD UI is accessible. Login to it, run `kubectl get secrets -n argocd` and run `kubectl edit secret argocd—initial—admin—secret —n argocd` to get the password, copy the `password`.
+- It is 64 bace N coded, run `echo password | base64 --decode`, the actual password will be displayed.
+- Now login to ArgoCD, username : admin and password : the displayed password.
+____
+- Click on `CREATE APPLICATION`, provide `Application Name` like 'productcatalog-service'.
+- `Project Name` will be 'default'. `SYNC POLICY` will be set to 'Automatic' (Meaning: Argo CD will automatically detect any changes in the git repo) and check `SELF HEAL` box.
+- Provide the `Repository URL` from github. `REVISION` will remain 'HEAD'. `Path` will be 'Kubernates/productcatalog'.
+- Under `DESTINATION`, `Cluster URl` will be 'https://kubernetes.default.svc' and `Namespace` will be 'default'.
+- Click on `Create` button.
+- Run `kubectl get rs` new replica set will be delpoyed by ArgoCD, `opentelemetry-demo-productcatalogservice-xxxx123456` replica set.
+- Run `kubectl edit rs opentelemetry-demo-productcatalogservice-xxxx123456`, check if new image is deployed.
+
+
+
