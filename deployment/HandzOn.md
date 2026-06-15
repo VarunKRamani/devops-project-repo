@@ -21,10 +21,9 @@ ____
 
 <img width="800" height="600" alt="Screenshot 2026-04-15 144215" src="https://github.com/user-attachments/assets/263a7b98-f096-4bd5-b1de-c399487295fa" />
 
-<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/afb9ee1e-59fb-4698-ac2a-1285c1459fb1" />
-____
-## Creation of Infrastructure
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/afb9ee1e-59fb-4698-ac2a-1285c1459fb1"/>
 
+## Creation of Infrastructure
 - The Resource/Infrastructure requried are created using Terraform. Get into directory '~/Desktop/ Terraform'.
 
 <img width="800" height="600" alt="Screenshot 2026-04-17 143100" src="https://github.com/user-attachments/assets/c0cb5cd0-dccf-4543-b3b5-3483b655d036" />
@@ -170,7 +169,9 @@ ____
 🎉😃🥳😃
 _____
 
-## CICD 
+**Second deployment was made with Intigration of CICD, CI with GitHub Action and CD with GitOps(ArgoCD)**
+
+## CICD
 GitHub Actions used for **CI**, Implementing CI for a microservice.
 - Once the directory and ci.yaml file is created. The exp of ci.yaml is in /CICD/Readme.md
 - Started by creating repo's Actions secrets. **New Repository Secret** , Add `DOCKER_USERNAME` and `DOCKER_TOKEN`.
