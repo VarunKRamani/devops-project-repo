@@ -2,6 +2,12 @@
 
 Will be adding prerequisits, problems faces and other actions took while deploying this peoject.
 
+- Git
+- AWS CLI
+- Docker
+- Helm
+- ArgoCD (CD)
+
 # Docker
 - Clone the repo, run `git clone repo-URL`.
 - The docker files for all the microservices were written, when needed there have been multi stage docker builds resulting in lighter docker image easier during deployment.
