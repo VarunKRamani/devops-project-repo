@@ -2,6 +2,14 @@
 
 Will be adding prerequisits, problems faces and other actions took while deploying this peoject.
 
+- Git
+- AWS CLI
+- Java
+- Docker
+- Terraform
+- Helm
+- ArgoCD (CD)
+
 # Docker
 - Clone the repo, run `git clone repo-URL`.
 - The docker files for all the microservices were written, when needed there have been multi stage docker builds resulting in lighter docker image easier during deployment.
@@ -136,6 +144,9 @@ ___
 Will be handling the CI with the help of Github Actions, reson to choose Github actions is that we are using GitHub as our version control paltform and will be easier to perform CI actions. 
 
 - Get the **CI.yaml** prepared (the code explanation of CI.yaml is in /CICD/readme.md )
+- ci.yaml has been added on `/deployment/ci.yaml`
+- It consists of 4 jobs, namely `build, code-quality, docker and updatek8s`.
+- Once the docker job is completed in the last step i.e. `updatek8s` the updated k8s manifest will be pushed to the github, where CD will taked over the deployment according the updated k8s manifests.  
 
 [We are performing the CI for a microservice **product catalog** for understanding the CI actions and to understand the structure of CI.yaml (jobs and steps are explained in that file.)]
 
