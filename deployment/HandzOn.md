@@ -221,4 +221,11 @@ ____
 - Run `kubectl edit rs opentelemetry-demo-productcatalogservice-xxxx123456`, check if new image is deployed.
 
 
+**The first deployment was purely done to access the project 
+the 2nd deployemnt was made where CI and CD was implemented and tested with changes. 
+**
+
+Second deployment results :
+
+-------------------
 
