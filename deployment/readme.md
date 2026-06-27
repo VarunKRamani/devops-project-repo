@@ -4,7 +4,9 @@ Will be adding prerequisits, problems faces and other actions took while deployi
 
 - Git
 - AWS CLI
+- Java
 - Docker
+- Terraform
 - Helm
 - ArgoCD (CD)
 
