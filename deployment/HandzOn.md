@@ -29,6 +29,8 @@ ____
 <img width="800" height="600" alt="Screenshot 2026-04-17 143100" src="https://github.com/user-attachments/assets/c0cb5cd0-dccf-4543-b3b5-3483b655d036" />
 
 - Once the initialization is done, `terraform plan` is ran.
+note: We can run `terraform plan -out=fileName`. This creates a file named `fileName` in which the plan will be saved.
+(Terraform only displayed the execution plan on your screen. It did not save it under the command `terraform plan`. Terraform will recalculate the plan before applying it. If anything has changed in the meantime. For example, someone changed the infrastructure or you modified the Terraform files. The actions might differ from the plan you just saw.) Then apply that exact plan by running `terraform apply fileName` the plan that was reviewed earlier during the plan command will be applied.
 
 <img width="800" height="600" alt="Screenshot 2026-04-17 143155" src="https://github.com/user-attachments/assets/d22b912d-4f10-4e2b-8294-7e3a16598219" />
 
