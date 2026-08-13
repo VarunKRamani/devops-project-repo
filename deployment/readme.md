@@ -35,13 +35,20 @@ Check the eks cluster created with `kubectl get nodes`.
 (need to AWS CLI and configure it with `aws configure`).
 
 - Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
+- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig.
+**what is kubeconfig ?**
 
-[What is kubectl ?
+**What is kubectl ?**
 Kubectl is command line clint for kubernetes.
 - It communicates with kubernetes API server. Through API server kubectl communicates with cluster
 - the Flow:  User/Terminal --> Kubectl --> Kubernetes API server --> Kubernetes Control plane --> Cluster state --> Response --> Kubectl --> User/Terminal
 - API server is the main entry point for kubernetes cluster
-]
+
+  **A kubeconfig allows you to keep information about multiple clusters and switch between them using contexts**
+- Using the command `kubectl config use-context <context-name>`, select which cluster `kubectl` should talk to.   
+ **What is context ?**
+  
+
 - Now run `kubectl config view` --> o/p all the details of the EKS cluster.
 - To check the current context, run `kubectl config current-context`
 ___
