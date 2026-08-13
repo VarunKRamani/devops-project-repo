@@ -35,8 +35,18 @@ Check the eks cluster created with `kubectl get nodes`.
 (need to AWS CLI and configure it with `aws configure`).
 
 - Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
-- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig.
+- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig, `--region region-code` tells AWS where the cluster is, `--name cluster-name` name to identify the cluster. 
 **what is kubeconfig ?**
+- Kubeconfig is configuration file which tells `kubectl` where and how to connect to a Kubernetes cluster. By default it is `~/.kube/config`.
+- **A kubeconfig allows you to keep information about multiple clusters and switch between them using contexts**.
+- when we ran the command, AWS CLI gets the necessary information about `cluster-name` and adds it to our local i.e. in `~/.kube/config`.
+- `~/.kube/config` -->  Cluster information, Authentication information & Context.
+- kubeconfig is a configuration file that provides the necessary information to `kubectl` to connect to and Authenticate with Kubernetes cluster.
+
+**What is context ?**
+- Under Kuberenetes, Context is a configuration which tells kubectl whichkubernetes cluster and user credentials to use when executing commands.
+- **Context = Cluster + User**
+- when ran `kubectl get pods`, kubectl uses the current context to determine which cluster it should send the command to and which identity it should use.
 
 **What is kubectl ?**
 Kubectl is command line clint for kubernetes.
@@ -44,9 +54,7 @@ Kubectl is command line clint for kubernetes.
 - the Flow:  User/Terminal --> Kubectl --> Kubernetes API server --> Kubernetes Control plane --> Cluster state --> Response --> Kubectl --> User/Terminal
 - API server is the main entry point for kubernetes cluster
 
-  **A kubeconfig allows you to keep information about multiple clusters and switch between them using contexts**
 - Using the command `kubectl config use-context <context-name>`, select which cluster `kubectl` should talk to.   
- **What is context ?**
   
 
 - Now run `kubectl config view` --> o/p all the details of the EKS cluster.
