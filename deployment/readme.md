@@ -35,7 +35,8 @@ Check the eks cluster created with `kubectl get nodes`.
 (need to AWS CLI and configure it with `aws configure`).
 
 - Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
-- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig, `--region region-code` tells AWS where the cluster is, `--name cluster-name` name to identify the cluster. 
+- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig, `--region region-code` tells AWS where the cluster is, `--name cluster-name` name to identify the cluster.
+
 **what is kubeconfig ?**
 - Kubeconfig is configuration file which tells `kubectl` where and how to connect to a Kubernetes cluster. By default it is `~/.kube/config`.
 - **A kubeconfig allows you to keep information about multiple clusters and switch between them using contexts**.
@@ -71,13 +72,20 @@ To deploy the project on kubernetes--
 - Connect to the cluster that was created, How --> run `kubectl config current-context`, o/p --> should see the cluster that was created.
 - Quick check if any pods containers are running / no previous deployments, How --> run `kubectl get all`
 - Get to the path 'ultimate-devops-project-demo/kubernetes'.
-- Need to create a service account `vim serviceaccount.yaml` check, and run `kubectl apply —f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry—demo created'. To varify run `kubectl get sa`. Note : If not careated the kubernetes will start using the default service account. 
+
+# Service account creation:
+What is Service account ? : **A service account is an identity for a pod inside Kubernetes**. It proivides identity to workloads running inside cluster.
+kubectl --> Kubernetes API Server --> Create ServiceAccount --> opentelemetry-demo
+
+Why Service account is needed ?  : **Pod needs an identity to determine who it is and what it is allowed to access, that identity is given by Service account. Service account is a Kubernetes identity for pods/applications, used to control what they are allowed to acces.**
+
+- Need to create a service account `vim serviceaccount.yaml` check, and run `kubectl apply —f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry—demo created'. To varify run `kubectl get sa`. **The ServiceAccount now exists inside the Kubernetes cluster.** Note : If not created the Kubernetes will start using the default service account.
 - Run `terraform apply -f complete-deploy.yaml`. This will start creating the services. list of created services and then deployments will be shown.
 - To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
 - To check services run `kubectl get svc`.
 - Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
 
-
+_____________
 ## How to access this deployed project ?
 We have set the `type: ClusterIP` as service type in the service resource and as we know the clusterIP only allows the internal connection among clusters. We failed to access the frontend. 
 Now, 
@@ -96,7 +104,7 @@ The service type of frontendproxy need to be changed :
 _**Note**_ : Change the type back to node port `type: NodePort` once deployed and checked. Load balancer costs $.
 
 We came to know how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
-___
+__________
 ## Deploying Project using Ingress Controller 
 
 - Will start with checking the current cluster `kubectl config current-context`
