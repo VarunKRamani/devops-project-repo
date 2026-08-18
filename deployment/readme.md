@@ -111,18 +111,15 @@ __________
 - We need to create IAM role and assign policy with requried permissions to the IAM role.
 - We will connect the service account with IAM role using IAM OIDC provider.
 - We need to configure the IAM OIDC provider, run `export cluster_name=<CLUSTER—NAME>`. We are Exporting/Storing the cluster name in `cluster_name` variable. 
-- Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`. The describe-cluster command gets information about the cluster, let's break down the command. ----------------------EXPPPPPPPPPPPPP
---------------------
-
-
-
-- The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`.
-- Add the OIDC provider to the cluster, run `eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve`
-- Need to create Service accoutn and IAM policy, policy with ELB related permissions, create IAM role and attach that to the service account of ALB controller.
-- To get the policy, AWS provides the policy in `.JSON` form. Run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json`
+- Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`. The describe-cluster command gets information about the cluster, let's break down the command. `--query "cluster.identity.oidc.issuer"` extracts the OIDC issuer URL. `oidc_id=$(...)`, stores that value in the oidc_id variable.
+- The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`. It will print the OIDC ID and can be verified.   
+- Associates EKS cluster's oidc identity provider with AWS IAM  , run `eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve`. **It establishes the trust mechanism needed for Kubernetes Service account to use AWS IAM role.**
+- **Kubernetes ServiceAccount --> OIDC --> AWS IAM**
+- Need to create Service account and IAM policy, policy with ELB related permissions, create IAM role and attach that to the service account of ALB controller.
+- **Download** the policy, AWS provides the policy in `.JSON` form. Run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json`
 - The file will be found run `ls` and find `iam_policy.json` contains all the permissions related to elastic load balancer.
-- To create IAM policy run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`. The policy will get created.
-- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve` this command creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override
+- To **Create IAM policy** run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`. The policy will get created.
+- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve` this command **creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role**. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override
 
 ______________
 - **Install Helm** from using documentataion.
