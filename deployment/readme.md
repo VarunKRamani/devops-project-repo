@@ -35,7 +35,8 @@ Check the eks cluster created with `kubectl get nodes`.
 (need to AWS CLI and configure it with `aws configure`).
 
 - Run the command `aws eks update-kubeconfig --region region-code --name cluster-name`, region-code and cluster-name have to be added to the command. if done o/p --> "Added new context ___"
-- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig, `--region region-code` tells AWS where the cluster is, `--name cluster-name` name to identify the cluster. 
+- Let's break down the command we used `aws ..` we are talking to AWS, `.. eks ..` we need to interact with AWS EKS, `.. update-kubeconfig ..` get the information required to connect `kubectl` to this EKS cluster and update/add it in my local kubeconfig, `--region region-code` tells AWS where the cluster is, `--name cluster-name` name to identify the cluster.
+
 **what is kubeconfig ?**
 - Kubeconfig is configuration file which tells `kubectl` where and how to connect to a Kubernetes cluster. By default it is `~/.kube/config`.
 - **A kubeconfig allows you to keep information about multiple clusters and switch between them using contexts**.
@@ -71,13 +72,19 @@ To deploy the project on kubernetes--
 - Connect to the cluster that was created, How --> run `kubectl config current-context`, o/p --> should see the cluster that was created.
 - Quick check if any pods containers are running / no previous deployments, How --> run `kubectl get all`
 - Get to the path 'ultimate-devops-project-demo/kubernetes'.
-- Need to create a service account `vim serviceaccount.yaml` check, and run `kubectl apply —f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry—demo created'. To varify run `kubectl get sa`. Note : If not careated the kubernetes will start using the default service account. 
+
+# Service account creation:
+What is Service account ? : **A service account is an identity for a pod inside Kubernetes**. It proivides identity to workloads running inside cluster.
+kubectl --> Kubernetes API Server --> Create ServiceAccount --> opentelemetry-demo
+
+Why Service account is needed ?  : **Pod needs an identity to determine who it is and what it is allowed to access, that identity is given by Service account. Service account is a Kubernetes identity for pods/applications, used to control what they are allowed to acces.**
+
+- Need to create a service account `vim serviceaccount.yaml` check, and run `kubectl apply —f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry—demo created'. To varify run `kubectl get sa`. **The ServiceAccount now exists inside the Kubernetes cluster.** Note : If not created the Kubernetes will start using the default service account.
 - Run `terraform apply -f complete-deploy.yaml`. This will start creating the services. list of created services and then deployments will be shown.
 - To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
 - To check services run `kubectl get svc`.
 - Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
-
-
+_____________
 ## How to access this deployed project ?
 We have set the `type: ClusterIP` as service type in the service resource and as we know the clusterIP only allows the internal connection among clusters. We failed to access the frontend. 
 Now, 
@@ -96,30 +103,32 @@ The service type of frontendproxy need to be changed :
 _**Note**_ : Change the type back to node port `type: NodePort` once deployed and checked. Load balancer costs $.
 
 We came to know how Load balancer service type is not efficient and cost effective. We will deploy the project using ingress Controller.
-___
+__________
 ## Deploying Project using Ingress Controller 
 
 - Will start with checking the current cluster `kubectl config current-context`
 - We need to create IAM role and assign policy with requried permissions to the IAM role.
 - We will connect the service account with IAM role using IAM OIDC provider.
-- We need to configure the IAM OIDC provider, run `export cluster_name=<CLUSTER—NAME>`.
-- Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`
-- The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`.
-- Add the OIDC provider to the cluster, run `eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve`
-- Need to create Service accoutn and IAM policy, policy with ELB related permissions, create IAM role and attach that to the service account of ALB controller.
-- To get the policy, AWS provides the policy in `.JSON` form. Run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json`
+- **OIDC provider**: OIDC (OpenID Connect) Provider is a trusted identity provider that allows AWS IAM to verify the identity of a Kubernetes ServiceAccount. Kubernetes ServiceAccount --> OIDC --> AWS IAM --> IAM Role. Why we need oidc?, AWS does not have an way to trust Kubernetes identity. An OIDC provider **establishes trust between Kubernetes ServiceAccounts and AWS IAM**, enabling Pods to securely assume IAM roles.
+- We need to configure the IAM OIDC provider, run `export cluster_name=<CLUSTER—NAME>`. We are Exporting/Storing the cluster name in `cluster_name` variable. 
+- Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`. The describe-cluster command gets information about the cluster, let's break down the command. `--query "cluster.identity.oidc.issuer"` extracts the OIDC issuer URL. `oidc_id=$(...)`, stores that value in the oidc_id variable.
+- The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`. It will print the OIDC ID and can be verified.   
+- Associates EKS cluster's oidc identity provider with AWS IAM  , run `eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve`. **It establishes the trust mechanism needed for Kubernetes Service account to use AWS IAM role.**
+- **Kubernetes ServiceAccount --> OIDC --> AWS IAM**
+- Need to create Service account and IAM policy, policy with ELB related permissions, create IAM role and attach that to the service account of ALB controller.
+- **Download** the policy, AWS provides the policy in `.JSON` form. Run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json`
 - The file will be found run `ls` and find `iam_policy.json` contains all the permissions related to elastic load balancer.
-- To create IAM policy run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`. The policy will get created.
-- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve` this command creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override
+- To **Create IAM policy** run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`. The policy will get created.
+- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve`, this command **creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role**. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override.
 
-  
+______________
 - **Install Helm** from using documentataion.
 - Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`
 - Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. O/p --> AWS Load Balancer controller installed!
 - Verify the pods if up and running, run `kubectl get pods —n kube—system`.
 - Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
 
-___
+_________
 
 Make sure the load balancer is removed --> run `kubectl edit svc opentelemetry—demo—frontendproxy` and change the type back to `type: NodePort`, the load balancer will be deleted automatically 
 
