@@ -84,7 +84,6 @@ Why Service account is needed ?  : **Pod needs an identity to determine who it i
 - To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
 - To check services run `kubectl get svc`.
 - Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
-
 _____________
 ## How to access this deployed project ?
 We have set the `type: ClusterIP` as service type in the service resource and as we know the clusterIP only allows the internal connection among clusters. We failed to access the frontend. 
@@ -110,6 +109,7 @@ __________
 - Will start with checking the current cluster `kubectl config current-context`
 - We need to create IAM role and assign policy with requried permissions to the IAM role.
 - We will connect the service account with IAM role using IAM OIDC provider.
+- **OIDC provider**: OIDC (OpenID Connect) Provider is a trusted identity provider that allows AWS IAM to verify the identity of a Kubernetes ServiceAccount. Kubernetes ServiceAccount --> OIDC --> AWS IAM --> IAM Role. Why we need oidc?, AWS does not have an way to trust Kubernetes identity. An OIDC provider **establishes trust between Kubernetes ServiceAccounts and AWS IAM**, enabling Pods to securely assume IAM roles.
 - We need to configure the IAM OIDC provider, run `export cluster_name=<CLUSTER—NAME>`. We are Exporting/Storing the cluster name in `cluster_name` variable. 
 - Command to extract the OIDC ID of the EKS cluster. `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`. The describe-cluster command gets information about the cluster, let's break down the command. `--query "cluster.identity.oidc.issuer"` extracts the OIDC issuer URL. `oidc_id=$(...)`, stores that value in the oidc_id variable.
 - The OIDC ID will be saver in `oidc_id` variable, to check run `echo $oidc_id`. It will print the OIDC ID and can be verified.   
@@ -119,7 +119,7 @@ __________
 - **Download** the policy, AWS provides the policy in `.JSON` form. Run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json`
 - The file will be found run `ls` and find `iam_policy.json` contains all the permissions related to elastic load balancer.
 - To **Create IAM policy** run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`. The policy will get created.
-- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve` this command **creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role**. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override
+- Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve`, this command **creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role**. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override.
 
 ______________
 - **Install Helm** from using documentataion.
