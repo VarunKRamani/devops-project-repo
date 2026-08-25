@@ -122,10 +122,10 @@ __________
 - Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve`, this command **creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role**. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override.
 
 ______________
-- **Install Helm** from using documentataion.
-- Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`
-- Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. O/p --> AWS Load Balancer controller installed!
-- Verify the pods if up and running, run `kubectl get pods —n kube—system`.
+- **Install Helm** from using documentataion. This section is where we **actually install the AWS Load Balancer Controller into the EKS cluster**.
+- Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`. Adds the **AWS EKS Helm chart repository to your local Helm configuration**. Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart.
+- Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. It tells Helm to install the AWS Load Balancer Controller into my EKS cluster using the AWS Load Balancer Controller Helm chart. O/p --> AWS Load Balancer controller installed!.
+- Verify the pods if up and running, run `kubectl get pods —n kube—system`. 
 - Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
 
 _________
