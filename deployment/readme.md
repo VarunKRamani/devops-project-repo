@@ -122,6 +122,7 @@ __________
 - Run `eksctl create iamserviceaccount --cluster=<your-cluster-name> --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy --approve`, this command **creates an IAM Service Account for Kubernetes and connects it to an AWS IAM Role**. This command gives the AWS Load Balancer Controller permission to manage AWS load balancers from inside the Kubernetes cluster without using AWS access keys. o/p will be --> serviceaccounts that exist in Kubernetes will be excluded, use —-override-existing-serviceaccounts to override.
 
 ______________
+
 - **Install Helm** from using documentataion. This section is where we **actually install the AWS Load Balancer Controller into the EKS cluster**.
 - **Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart**
 - Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`. Adds the **AWS EKS Helm chart repository to your local Helm configuration**. Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart.
@@ -163,6 +164,11 @@ spec:
 - Save the file and run `kubectl apply -f ingress.yaml`, the o/p -->> "ingress.networking.k8s.io/frontend—proxy created"
 - The ingress controller read the ingress resource and created a loadbalancer. to check run `kubectl get ing`
 - Check the AWS console under loadbalancer, the LB will be created.
+
+_______
+
+Project Accessing -
+
 - Once the status is `Active`, try running the **DNS name**, the project will not be accessible, it will fail. Cause, in the ingress.yaml file we have said only allow the access from `**example.com**`. As example.com is not a real domain, we need to edit DNS records of the system and then access the project.
 - Run `nslookup DNS-name-given-by-loadbalancer`, try running the IPs and DNS names to access the project, it will FAIL. As mentioned only from example.com we can access the project.
 - Will change the local DNS records of the local system in our case the VM for testing, run `sudo vim /etc/hosts`. Add the IP from nslookup command and example.com (Ex: 44.55.112.21 example.com) and save. (note: it might not work on some browsers, no need to worry)
@@ -200,10 +206,10 @@ Will be handling the CI with the help of Github Actions, reson to choose Github 
 - CI is Done !!!
 
 CI Code explination is given under /CICD/readme.md
+_________
 
 ## CD with GitOps
 
-CD --> 
 **Installation and Setup**
 - Run `kubectl create namespace argocd`, We are creating a namespace called **argocd **.
 - Run `kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
@@ -224,4 +230,4 @@ CD -->
 - Let the process run, now check if the latest deployment is done. Click on the pod that is up, under SUMMARY >> IMAGES, we get to see new name of the new image, updated by CI and now being deployed.  
 - Can push a new change in product catalog's main.go code (like a comment) and see CI CD in action, once the change is pushed.
 
-------------------------------
+------------------------------x------------------------------
