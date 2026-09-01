@@ -125,14 +125,17 @@ ______________
 
 - **Install Helm** from using documentataion. This section is where we **actually install the AWS Load Balancer Controller into the EKS cluster**.
 - **Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart**
+- Helm is a package manager for Kubernetes. A Helm package is called Helm chart, A chart contains the Kubernetes configuration needed to deploy an application.
 - Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`. Adds the **AWS EKS Helm chart repository to your local Helm configuration**. Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart.
 - Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. serviceAccount.create=false, because we already created the ServiceAccount and connected it to the IAM Role. It tells Helm to install the AWS Load Balancer Controller into my EKS cluster using the AWS Load Balancer Controller Helm chart. O/p --> AWS Load Balancer controller installed!.
 - Verify the pods if up and running, run `kubectl get pods —n kube—system`. 
 - Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
 
+<img width="1536" height="1024" alt="Helm" src="https://github.com/user-attachments/assets/1f3ed32c-5279-40a3-9556-9fdc4177a365" />
+
 _________
 
-** Make sure the load balancer is removed --> run `kubectl edit svc opentelemetry—demo—frontendproxy` and change the type back to `type: NodePort`, the load balancer will be deleted automatically 
+**Make sure the load balancer is removed --> run `kubectl edit svc opentelemetry—demo—frontendproxy` and change the type back to `type: NodePort`, the load balancer will be deleted automatically**
 
 ## Creating the Ingress Resource 
 - We are creating for Frontend proxy, go to `~/ultimate-devops—project-demo/kubernetes/frontendproxy$` and create **ingress.yaml** run `vim ingress.yaml`.
