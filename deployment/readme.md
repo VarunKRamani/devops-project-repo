@@ -131,7 +131,10 @@ ______________
 - Verify the pods if up and running, run `kubectl get pods —n kube—system`. 
 - Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
 
+<img width="1536" height="1024" alt="ChatGPT Image Sep 2, 2026, 03_34_57 PM" src="https://github.com/user-attachments/assets/369cd74e-df0d-47c2-b335-ff0ce939745c" />
+
 <img width="1536" height="1024" alt="Helm" src="https://github.com/user-attachments/assets/1f3ed32c-5279-40a3-9556-9fdc4177a365" />
+
 
 _________
 
