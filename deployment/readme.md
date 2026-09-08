@@ -25,6 +25,8 @@ Will be adding prerequisits, problems faces and other actions took while deployi
 - Run `terraform apply` --> Enter a value : type "yes". Now the terraform will start forming/creating and will take some time. (message will be) --> Apply complete! Resource: 32 added, 0 changed, 0 destroyed. and the output will be displayed.
 - later can be varified on AWS console.
 - Remember -- the cost clock will start, make sure to move to next k8s deployment if not run `terraform destroy`.
+<img width="1536" height="1024" alt="Terraform img" src="https://github.com/user-attachments/assets/866f3af6-8eb7-42fa-83b1-37a062b21f52" />
+
 _________________
 ## Connecting to the cluster-
 - Once the EKS cluster is created. 
