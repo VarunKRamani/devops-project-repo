@@ -25,6 +25,8 @@ Will be adding prerequisits, problems faces and other actions took while deployi
 - Run `terraform apply` --> Enter a value : type "yes". Now the terraform will start forming/creating and will take some time. (message will be) --> Apply complete! Resource: 32 added, 0 changed, 0 destroyed. and the output will be displayed.
 - later can be varified on AWS console.
 - Remember -- the cost clock will start, make sure to move to next k8s deployment if not run `terraform destroy`.
+<img width="1536" height="1024" alt="Terraform img" src="https://github.com/user-attachments/assets/866f3af6-8eb7-42fa-83b1-37a062b21f52" />
+
 _________________
 ## Connecting to the cluster-
 - Once the EKS cluster is created. 
@@ -125,14 +127,20 @@ ______________
 
 - **Install Helm** from using documentataion. This section is where we **actually install the AWS Load Balancer Controller into the EKS cluster**.
 - **Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart**
+- Helm is a package manager for Kubernetes. A Helm package is called Helm chart, A chart contains the Kubernetes configuration needed to deploy an application.
 - Add helm repo related to EKS, run `helm repo add eks https://aws.github.io/eks-charts`. Adds the **AWS EKS Helm chart repository to your local Helm configuration**. Your Helm --> AWS EKS Helm Repository --> AWS Load Balancer Controller chart.
 - Install the ALB controller `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<your-cluster-name> --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=<region> --set vpcId=<your-vpc-id>`. pass the parameters vpc-id, your-cluster-name and region. serviceAccount.create=false, because we already created the ServiceAccount and connected it to the IAM Role. It tells Helm to install the AWS Load Balancer Controller into my EKS cluster using the AWS Load Balancer Controller Helm chart. O/p --> AWS Load Balancer controller installed!.
 - Verify the pods if up and running, run `kubectl get pods —n kube—system`. 
 - Verify that the deployments are running, run `kubectl get deployment -n kube-system aws-load-balancer-controller`.
 
+<img width="1536" height="1024" alt="ChatGPT Image Sep 2, 2026, 03_34_57 PM" src="https://github.com/user-attachments/assets/369cd74e-df0d-47c2-b335-ff0ce939745c" />
+
+<img width="1536" height="1024" alt="Helm" src="https://github.com/user-attachments/assets/1f3ed32c-5279-40a3-9556-9fdc4177a365" />
+
+
 _________
 
-** Make sure the load balancer is removed --> run `kubectl edit svc opentelemetry—demo—frontendproxy` and change the type back to `type: NodePort`, the load balancer will be deleted automatically 
+**Make sure the load balancer is removed --> run `kubectl edit svc opentelemetry—demo—frontendproxy` and change the type back to `type: NodePort`, the load balancer will be deleted automatically**
 
 ## Creating the Ingress Resource 
 - We are creating for Frontend proxy, go to `~/ultimate-devops—project-demo/kubernetes/frontendproxy$` and create **ingress.yaml** run `vim ingress.yaml`.
