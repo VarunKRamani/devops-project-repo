@@ -14,7 +14,9 @@ Will be adding prerequisits, problems faces and other actions took while deployi
 - Clone the repo, run `git clone repo-URL`.
 - The docker files for all the microservices were written, when needed there have been multi stage docker builds resulting in lighter docker image easier during deployment.
 - Different microservices have been coded with different languages, accordingly the docker files haven been written and images are formed.
-- To up all the services using docker compose, run file docker-compose.yaml  
+- To up all the services using docker compose, run file docker-compose.yaml
+
+<img width="1536" height="859" alt="docker_img" src="https://github.com/user-attachments/assets/e0fc8b9b-ceee-4795-9098-2b2429029e3e" />
 
 # Terraform
 
