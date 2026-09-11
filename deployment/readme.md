@@ -216,6 +216,9 @@ Will be handling the CI with the help of Github Actions, reson to choose Github 
 - CI is Done !!!
 
 CI Code explination is given under /CICD/readme.md
+
+<img width="1536" height="866" alt="CI_img" src="https://github.com/user-attachments/assets/65b8cd6e-4d44-46b7-8058-1b66ad9db0b5" />
+
 _________
 
 ## CD with GitOps
