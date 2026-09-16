@@ -243,4 +243,7 @@ _________
 - Let the process run, now check if the latest deployment is done. Click on the pod that is up, under SUMMARY >> IMAGES, we get to see new name of the new image, updated by CI and now being deployed.  
 - Can push a new change in product catalog's main.go code (like a comment) and see CI CD in action, once the change is pushed.
 
+<img width="1536" height="856" alt="CD_img_" src="https://github.com/user-attachments/assets/77aeafc3-300b-4520-a6d0-4bf143bcd766" />
+
+
 ------------------------------x------------------------------
