@@ -88,6 +88,9 @@ Why Service account is needed ?  : **Pod needs an identity to determine who it i
 - To verify run `kubectl get pods`, make sure **all the pods** are in **running** state.
 - To check services run `kubectl get svc`.
 - Try accesing the frontend using the service Ip address:port, we were not able to access the project/frontend.
+
+<img width="1536" height="875" alt="K8s_img" src="https://github.com/user-attachments/assets/aaa3eb2d-3414-4fbf-90b9-a9987146d3a1" />
+
 _____________
 ## How to access this deployed project ?
 We have set the `type: ClusterIP` as service type in the service resource and as we know the clusterIP only allows the internal connection among clusters. We failed to access the frontend. 
