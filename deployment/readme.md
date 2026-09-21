@@ -10,6 +10,8 @@ Will be adding prerequisits, problems faces and other actions took while deployi
 - Helm
 - ArgoCD (CD)
 
+<img width="1536" height="812" alt="pro_img" src="https://github.com/user-attachments/assets/962e8862-d1af-4ad6-b8a0-e3a79d10d893" />
+
 # Docker
 - Clone the repo, run `git clone repo-URL`.
 - The docker files for all the microservices were written, when needed there have been multi stage docker builds resulting in lighter docker image easier during deployment.
