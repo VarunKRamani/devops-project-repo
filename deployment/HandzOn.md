@@ -3,10 +3,10 @@
 ## Setting the Budget -
 - Insted of using EC2 from AWS to build infrastructure and access clusters etc, a virtualbox ubuntu VM was used to keep the cost low.
 - The project has been set with the budget. This is set keeping in mind of things including project architecture built using terraform, kuberneres clusters and CICD. 
-<img width="700" height="400" alt="Screenshot 2026-04-15 132103" src="https://github.com/user-attachments/assets/01781d08-deae-4ca8-a114-a4bd6cd6689e" />
+<img width="700" height="400" alt="Screenshot 132103" src="https://github.com/user-attachments/assets/01781d08-deae-4ca8-a114-a4bd6cd6689e" />
 
 - The Alerts have been set, basing on the resource usage the cost will climb and will be notified if corsses the set limit. 
-<img width="800" height="250" alt="Screenshot 2026-04-15 132519" src="https://github.com/user-attachments/assets/5a0ccc95-4072-4498-b9c3-da75b59272ac" />
+<img width="800" height="250" alt="Screenshot 132519" src="https://github.com/user-attachments/assets/5a0ccc95-4072-4498-b9c3-da75b59272ac" />
 
 ____
 **Prerequisites for the deployment--**
@@ -19,32 +19,32 @@ ____
 - And the Table name is 'terraform-eks-state-locks'.
 - The resouce are created in **(Oregon) us-west-2** region.
 
-<img width="800" height="600" alt="Screenshot 2026-04-15 144215" src="https://github.com/user-attachments/assets/263a7b98-f096-4bd5-b1de-c399487295fa" />
+<img width="800" height="600" alt="Screenshot 144215" src="https://github.com/user-attachments/assets/263a7b98-f096-4bd5-b1de-c399487295fa" />
 
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/afb9ee1e-59fb-4698-ac2a-1285c1459fb1"/>
 
 ## Creation of Infrastructure
 - The Resource/Infrastructure requried are created using Terraform. Get into directory '~/Desktop/ Terraform'.
 
-<img width="800" height="600" alt="Screenshot 2026-04-17 143100" src="https://github.com/user-attachments/assets/c0cb5cd0-dccf-4543-b3b5-3483b655d036" />
+<img width="800" height="600" alt="Screenshot  143100" src="https://github.com/user-attachments/assets/c0cb5cd0-dccf-4543-b3b5-3483b655d036" />
 
 - Once the initialization is done, `terraform plan` is ran.
 note: We can run `terraform plan -out=fileName`. This creates a file named `fileName` in which the plan will be saved.
 (Terraform only displayed the execution plan on your screen. It did not save it under the command `terraform plan`. Terraform will recalculate the plan before applying it. If anything has changed in the meantime. For example, someone changed the infrastructure or you modified the Terraform files. The actions might differ from the plan you just saw.) Then apply that exact plan by running `terraform apply fileName` the plan that was reviewed earlier during the plan command will be applied.
 
-<img width="800" height="600" alt="Screenshot 2026-04-17 143155" src="https://github.com/user-attachments/assets/d22b912d-4f10-4e2b-8294-7e3a16598219" />
+<img width="800" height="600" alt="Screenshot  143155" src="https://github.com/user-attachments/assets/d22b912d-4f10-4e2b-8294-7e3a16598219" />
 
 - During the plan the state lock is acquried. 
 
-<img width="800" height="600" alt="Screenshot 2026-04-17 143235" src="https://github.com/user-attachments/assets/91dbaf88-9352-4d8d-87a0-c0fc28c7fefd" />
+<img width="800" height="600" alt="Screenshot  143235" src="https://github.com/user-attachments/assets/91dbaf88-9352-4d8d-87a0-c0fc28c7fefd" />
 
 - Now run `terraform apply`, to actually create resources in AWS.
 
-<img width="800" height="600" alt="Screenshot 2026-04-22 112418" src="https://github.com/user-attachments/assets/dbfa3116-2124-40c1-81d5-a054a61bb28b" />
+<img width="800" height="600" alt="Screenshot  112418" src="https://github.com/user-attachments/assets/dbfa3116-2124-40c1-81d5-a054a61bb28b" />
 
 - 32 Resources created/added. State lock released once the resource creation is completed.
 
-<img width="800" height="180" alt="Screenshot 2026-04-22 113722" src="https://github.com/user-attachments/assets/02230149-ced0-4de3-95d4-f7f7cac22a33" />
+<img width="800" height="180" alt="Screenshot  113722" src="https://github.com/user-attachments/assets/02230149-ced0-4de3-95d4-f7f7cac22a33" />
 
 ____
 ## Connecting to the cluster and deploying the project(Ingress)
@@ -52,32 +52,32 @@ ____
 - Run `aws eks update-kubeconfig --region us-west-2 --name cluster_name`, o/p --> 'Added new context ___-'
 - Check if connect to EKS cluster, run `kubectl config current-context`, o/p --> 'displays the cluster name'
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 113436" src="https://github.com/user-attachments/assets/89539838-4435-4344-a2da-07751ae40389" />
+<img width="800" height="600" alt="Screenshot  113436" src="https://github.com/user-attachments/assets/89539838-4435-4344-a2da-07751ae40389" />
 
 - Get into to the directory '~/ultimate-devops-project-demo/kubernetes'.
 - Create a Service account,there is a .yaml file. Run `kubectl apply -f serviceaccount.yaml`, o/p --> 'serviceaccount/opentelemetry-demo created'
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 113653" src="https://github.com/user-attachments/assets/254ac782-fc7b-4768-8a09-45e59544883c" />
+<img width="800" height="600" alt="Screenshot  113653" src="https://github.com/user-attachments/assets/254ac782-fc7b-4768-8a09-45e59544883c" />
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 113901" src="https://github.com/user-attachments/assets/7d3ffc4e-77a0-4c75-b791-aeee7fa736ff" />
+<img width="800" height="600" alt="Screenshot  113901" src="https://github.com/user-attachments/assets/7d3ffc4e-77a0-4c75-b791-aeee7fa736ff" />
 
 - To check, run `kubectl get sa`, o/p --> table with default service account and the created service account 'opentelemetry-demo' with AGE will be displayed.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 113942" src="https://github.com/user-attachments/assets/aab88eb4-650a-4463-aa3f-1012e36f169c" />
+<img width="800" height="600" alt="Screenshot  113942" src="https://github.com/user-attachments/assets/aab88eb4-650a-4463-aa3f-1012e36f169c" />
 
 - Now, run the 'complete-deploy.yaml' file to up all the services, run `kubectl apply -f complete-deploy.yaml`. The services will start getting created then deployments.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 114143" src="https://github.com/user-attachments/assets/3f95e62c-09f9-4c20-a75c-42271b64558a" />
+<img width="800" height="600" alt="Screenshot  114143" src="https://github.com/user-attachments/assets/3f95e62c-09f9-4c20-a75c-42271b64558a" />
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 114128" src="https://github.com/user-attachments/assets/4366dba2-4218-4707-99c7-b3414f5c11c7" />
+<img width="800" height="600" alt="Screenshot  114128" src="https://github.com/user-attachments/assets/4366dba2-4218-4707-99c7-b3414f5c11c7" />
 
 - To check, run `kubectl get pods`. **Wait until the status of all the pods come to 'Running'.**
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 114239" src="https://github.com/user-attachments/assets/432a4c36-ad31-45e5-982c-b3cb65f3387b" />
+<img width="800" height="600" alt="Screenshot  114239" src="https://github.com/user-attachments/assets/432a4c36-ad31-45e5-982c-b3cb65f3387b" />
 
 - Check the same for services, run `kubectl get svc`. With the type 'ClusterIP'. Can use `kubectl get all` to list both services and pods.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 114356" src="https://github.com/user-attachments/assets/47cf6eaa-f5c7-417d-a54b-ad7b836526e0" />
+<img width="800" height="600" alt="Screenshot  114356" src="https://github.com/user-attachments/assets/47cf6eaa-f5c7-417d-a54b-ad7b836526e0" />
 
 ## Accessing the project 
 - To Access FrontEnd, we need to change the service type of the frontendproxy, run `kubectl get svc | grep frontendproxy`.
@@ -98,19 +98,19 @@ ____
 
 - Now run `echo $oidc_id`. O/p --> oids id.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 115731" src="https://github.com/user-attachments/assets/3ffc7e2d-97f5-48db-a48c-a52ca6e0a0c2" />
+<img width="800" height="600" alt="Screenshot  115731" src="https://github.com/user-attachments/assets/3ffc7e2d-97f5-48db-a48c-a52ca6e0a0c2" />
 
 - Now we will associate IAM oidc provider with the cluster(adding oidc provider to the cluster), run `eksctl utils associate-iam-oid-provider --cluster $cluster_name --approve`
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 120634" src="https://github.com/user-attachments/assets/21525b4c-3596-4e6d-a97f-3b568da45bda" />
+<img width="800" height="600" alt="Screenshot  120634" src="https://github.com/user-attachments/assets/21525b4c-3596-4e6d-a97f-3b568da45bda" />
 
 - Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 121251" src="https://github.com/user-attachments/assets/25739a8d-14a5-43d6-bdbf-37c58553dcb7" />
+<img width="800" height="600" alt="Screenshot  121251" src="https://github.com/user-attachments/assets/25739a8d-14a5-43d6-bdbf-37c58553dcb7" />
 
 - Create the policy, run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 121251" src="https://github.com/user-attachments/assets/da541f9a-6fc7-4432-94ba-67e8b4123bf6" />
+<img width="800" height="600" alt="Screenshot  121251" src="https://github.com/user-attachments/assets/da541f9a-6fc7-4432-94ba-67e8b4123bf6" />
 
 - Assign IAM role to the service account, run `eksctl create iamserviceaccount \
 --cluster=<your-cluster-name> \
@@ -122,11 +122,11 @@ ____
 
 _____
 - Install helm.
-<img width="800" height="600" alt="Screenshot 2026-05-08 122829" src="https://github.com/user-attachments/assets/1a079cf7-7a0b-4042-83d5-0e96f8346ea4" />
+<img width="800" height="600" alt="Screenshot  122829" src="https://github.com/user-attachments/assets/1a079cf7-7a0b-4042-83d5-0e96f8346ea4" />
 
 - Run `helm repo add eks https://aws.github.io/eks-charts`.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 123056" src="https://github.com/user-attachments/assets/2bccab9c-80fb-4b17-ae53-66d77ce9064c" />
+<img width="800" height="600" alt="Screenshot  123056" src="https://github.com/user-attachments/assets/2bccab9c-80fb-4b17-ae53-66d77ce9064c" />
 
 - To install ALB Controller, run `helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 -n kube-system \
@@ -137,11 +137,11 @@ _____
 --set vpcId=<your-vpc-id>`.
 Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 125212" src="https://github.com/user-attachments/assets/ff18a302-b8bc-4b19-81ac-95818f8ab68e" />
+<img width="800" height="600" alt="Screenshot  125212" src="https://github.com/user-attachments/assets/ff18a302-b8bc-4b19-81ac-95818f8ab68e" />
 
 - Verify if the ALB pods are up and running, run `kubectl get pods -n kube-system`. The formed pords(2) should be in 'Running' state/status.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 125254" src="https://github.com/user-attachments/assets/e00a4494-8d1a-4a22-8257-51ef932cbf84" />
+<img width="800" height="600" alt="Screenshot  125254" src="https://github.com/user-attachments/assets/e00a4494-8d1a-4a22-8257-51ef932cbf84" />
 
 - Can check the logs to further verify, run `kubectl logs <pod name> -n kube-system`. No error -> ALB controller installation is successful.
 ____
@@ -154,19 +154,19 @@ ____
 
 - Run, `kubectl get ing`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 130912" src="https://github.com/user-attachments/assets/cd85aa5c-14a7-4312-aedb-ced1f7b863ce" />
+<img width="800" height="600" alt="Screenshot  130912" src="https://github.com/user-attachments/assets/cd85aa5c-14a7-4312-aedb-ced1f7b863ce" />
 
 - As the `host` in ingress file is set as 'example.com', by browsing the ip or the DNS we cannot access the project. So, we will set the ip to the domain within out locak DNS records.
 
 - Get the Ip by running, `nslookup <dns-name-from-loadbalancer>`. In the local machine run `sudo vim /etc/hosts`, where we will write a dns record `IpAdress example.com` and save.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 132110" src="https://github.com/user-attachments/assets/dec660b1-ba92-4100-930a-532ab874386a" />
+<img width="800" height="600" alt="Screenshot  132110" src="https://github.com/user-attachments/assets/dec660b1-ba92-4100-930a-532ab874386a" />
 
 - Now browse 'example.com' and will be able to access the frontend.
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 132333" src="https://github.com/user-attachments/assets/5a30522d-930a-411f-a9c9-51ea7753060d" />
+<img width="800" height="600" alt="Screenshot  132333" src="https://github.com/user-attachments/assets/5a30522d-930a-411f-a9c9-51ea7753060d" />
 
-<img width="800" height="600" alt="Screenshot 2026-05-08 132428" src="https://github.com/user-attachments/assets/5151c8fc-e936-4d82-a834-d5ebc7fff5d0" />
+<img width="800" height="600" alt="Screenshot  132428" src="https://github.com/user-attachments/assets/5151c8fc-e936-4d82-a834-d5ebc7fff5d0" />
 
 🎉😃🥳😃
 _____
