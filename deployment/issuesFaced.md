@@ -43,4 +43,16 @@ ____
 
 <img width="800" height="600" alt="Screenshot 2026-05-23 191452" src="https://github.com/user-attachments/assets/9b5728b3-47d5-48e9-aa68-040578b2759a" />
 
-- All the resoucres were destroyed. 
+- All the resoucres were destroyed.
+
+  _________________________________________________________________
+
+  # Issues faced on 2nd deployment.
+
+  - Resource deletion issue -- exp
+ 
+  - terraform and helm version issue  ------- exp
+ 
+  - Service account issue -- exp
+ 
+
