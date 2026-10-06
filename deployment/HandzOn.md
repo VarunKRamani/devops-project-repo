@@ -135,6 +135,17 @@ _____
 --set serviceAccount.name=aws-load-ba1ancer—contr011er \
 --set region=<region> \
 --set vpcId=<your-vpc-id>`.
+----------------------------------------------------------------
+`vpc_id=$(aws eks describe-cluster --name my-eks-cluster --query "cluster.resourcesVpcConfig.vpcId" --output text)`
+
+`helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=my-eks-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=us-west-2 \
+  --set vpcId=$vpc_id`
+ -------------------------------------------------------------------------- 
 Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
 
 <img width="800" height="600" alt="Screenshot  125212" src="https://github.com/user-attachments/assets/ff18a302-b8bc-4b19-81ac-95818f8ab68e" />
