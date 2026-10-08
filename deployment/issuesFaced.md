@@ -49,10 +49,19 @@ ____
 
   # Issues faced on 2nd deployment.
 
-  - Resource deletion issue -- exp
- 
-  - terraform and helm version issue  ------- exp
- 
-  - Service account issue -- exp
+- **EKS cluster creation failed**, **Error message : "InvalidParameterException: AMI for this version 1.30 is not supported".** This error was caused cause of the outdated AMI type.
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/4419eac9-ab80-4943-99ca-2ddbc3c2ad76" />
+**Fixes**:
+  **ami_type Configuration**, Switched to Amazon Linux 2023 (AL2023_x86_64_STANDARD). Added `ami_type = "AL2023_x86_64_STANDARD"` in modules/eks/main.tf. (Note: ami type was not set Prior, When we don't explicitly set ami_type, AWS defaults to AL2_x86_64 i.e. Amazon Linux 2. Starting with Kubernetes 1.30, AWS officially deprecated Amazon Linux 2 for EKS managed node groups. AWS removed the AL2 base image mappings for version 1.30, making Amazon Linux 2023 the new default and required baseline OS. ) Then `terraform init -upgrade` followed by plan and apply.
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/1eea8e50-0860-4c1a-92b2-6e77ef84593e" />
+
+**Once AMI was set the EKS cluster was formed.** cluster_name="my-eks-cluster"
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/d627a31d-6eee-4450-b958-ad190dd739d1" />
+
+`Kubectl get nodes` to verify the nodes and it's status.
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/f87b1f7b-1781-4cb8-a941-92e1b979b450" />
+
+
+
  
 
