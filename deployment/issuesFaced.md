@@ -53,6 +53,8 @@ ____
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/4419eac9-ab80-4943-99ca-2ddbc3c2ad76" />
 **Fixes**:
   **ami_type Configuration**, Switched to Amazon Linux 2023 (AL2023_x86_64_STANDARD). Added `ami_type = "AL2023_x86_64_STANDARD"` in modules/eks/main.tf. (Note: ami type was not set Prior, When we don't explicitly set ami_type, AWS defaults to AL2_x86_64 i.e. Amazon Linux 2. Starting with Kubernetes 1.30, AWS officially deprecated Amazon Linux 2 for EKS managed node groups. AWS removed the AL2 base image mappings for version 1.30, making Amazon Linux 2023 the new default and required baseline OS. ) Then `terraform init -upgrade` followed by plan and apply.
+
+
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/1eea8e50-0860-4c1a-92b2-6e77ef84593e" />
 
 **Once AMI was set the EKS cluster was formed.** cluster_name="my-eks-cluster"
@@ -62,6 +64,13 @@ ____
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/f87b1f7b-1781-4cb8-a941-92e1b979b450" />
 
 
+- Update the curl command to download the JSON policy. `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json`
+
+- **Helm Installation**: Initially Helm v2.17.0 was installed, when tired to add EKS repository to Helm, we ran into an error. Error message was "Error: could not find tiller".
+<img width="512" height="371" alt="image" src="https://github.com/user-attachments/assets/2aac465f-1088-4644-b836-1e43be5ee4e1" />
+
+- **Fixes**:
+  Helm v2.xx.x relies on a server-side component called Tiller, which is **deprecated and incompatible with modern Kubernetes clusters**. Upgraded to Helm v3, which is client-only and does not require Tiller.
 
  
 
