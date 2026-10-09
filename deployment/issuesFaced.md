@@ -62,6 +62,11 @@ ____
 <img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/f87b1f7b-1781-4cb8-a941-92e1b979b450" />
 
 
+- Update the curl command to download the JSON policy. `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json`
+
+- Helm Installation ---- exp.
+
+
 
  
 
