@@ -192,6 +192,10 @@ GitHub Actions used for **CI**, Implementing CI for a microservice.
 -  Takes the newly built Docker image tag and update the Kubernetes deployment manifest in Git so that ArgoCD can deploy the new version automatically.
 -  Once all the 4 jobs are done, the pull request is closed.
 
+<img width="1200" height="600" alt="Screenshot 2026-10-06 191621" src="https://github.com/user-attachments/assets/208140bd-6e38-492b-8852-9deb70831fe7" />
+
+<img width="1200" height="600" alt="Screenshot 2026-10-06 191711" src="https://github.com/user-attachments/assets/a7082ee6-353a-43cd-9b4f-a2e08c03bd6b" />
+
 -------------------------------------------------------------------------------------
 # CD with GitOps
 
@@ -222,12 +226,4 @@ ____
 - Run `kubectl get rs` new replica set will be delpoyed by ArgoCD, `opentelemetry-demo-productcatalogservice-xxxx123456` replica set.
 - Run `kubectl edit rs opentelemetry-demo-productcatalogservice-xxxx123456`, check if new image is deployed.
 
-
-**The first deployment was purely done to access the project 
-the 2nd deployemnt was made where CI and CD was implemented and tested with changes. 
-**
-
-Second deployment results :
-
--------------------
-
+________________________________________________________________________________________________________________________________________________
