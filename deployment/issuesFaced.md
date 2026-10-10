@@ -50,27 +50,33 @@ ____
   # Issues faced on 2nd deployment.
 
 - **EKS cluster creation failed**, **Error message : "InvalidParameterException: AMI for this version 1.30 is not supported".** This error was caused cause of the outdated AMI type.
-<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/4419eac9-ab80-4943-99ca-2ddbc3c2ad76" />
-**Fixes**:
-  **ami_type Configuration**, Switched to Amazon Linux 2023 (AL2023_x86_64_STANDARD). Added `ami_type = "AL2023_x86_64_STANDARD"` in modules/eks/main.tf. (Note: ami type was not set Prior, When we don't explicitly set ami_type, AWS defaults to AL2_x86_64 i.e. Amazon Linux 2. Starting with Kubernetes 1.30, AWS officially deprecated Amazon Linux 2 for EKS managed node groups. AWS removed the AL2 base image mappings for version 1.30, making Amazon Linux 2023 the new default and required baseline OS. ) Then `terraform init -upgrade` followed by plan and apply.
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/4419eac9-ab80-4943-99ca-2ddbc3c2ad76" />
 
 
-<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/1eea8e50-0860-4c1a-92b2-6e77ef84593e" />
+- **Fixes**:**ami_type Configuration**, Switched to Amazon Linux 2023 (AL2023_x86_64_STANDARD). Added `ami_type = "AL2023_x86_64_STANDARD"` in modules/eks/main.tf.
+- (Note: ami type was not set Prior, When we don't explicitly set ami_type, AWS defaults to AL2_x86_64 i.e. Amazon Linux 2. Starting with Kubernetes 1.30, AWS officially deprecated Amazon Linux 2 for EKS managed node groups. AWS removed the AL2 base image mappings for version 1.30, making Amazon Linux 2023 the new default and required baseline OS. ) Then `terraform init -upgrade` followed by plan and apply.
 
-**Once AMI was set the EKS cluster was formed.** cluster_name="my-eks-cluster"
-<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/d627a31d-6eee-4450-b958-ad190dd739d1" />
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/1eea8e50-0860-4c1a-92b2-6e77ef84593e" />
 
-`Kubectl get nodes` to verify the nodes and it's status.
-<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/f87b1f7b-1781-4cb8-a941-92e1b979b450" />
+- **Once AMI was set the EKS cluster was formed.** cluster_name="my-eks-cluster"
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/d627a31d-6eee-4450-b958-ad190dd739d1" />
+
+- `Kubectl get nodes` to verify the nodes and it's status.
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/f87b1f7b-1781-4cb8-a941-92e1b979b450" />
 
 
 - Update the curl command to download the JSON policy. `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json`
 
 - **Helm Installation**: Initially Helm v2.17.0 was installed, when tired to add EKS repository to Helm, we ran into an error. Error message was "Error: could not find tiller".
-<img width="512" height="371" alt="image" src="https://github.com/user-attachments/assets/2aac465f-1088-4644-b836-1e43be5ee4e1" />
+<img width="512" height="150" alt="4b2b09df-d042-49ed-a8b4-a244ca784ae3" src="https://github.com/user-attachments/assets/c3608e26-caa1-43d4-988b-7a2d0101237a" />
 
 - **Fixes**:
   Helm v2.xx.x relies on a server-side component called Tiller, which is **deprecated and incompatible with modern Kubernetes clusters**. Upgraded to Helm v3, which is client-only and does not require Tiller.
 
- 
+- **Terraform teardown process**: During the deletion of resources after the deployment was done, Running `terraform destroy` got stuck for over 16 minutes attempting to delete module.vpc.aws_subnet.public and module.vpc.aws_internet_gateway.main.
 
+<img width="512" height="371" alt="image" src="https://github.com/user-attachments/assets/4caf4d07-46aa-438c-a0e7-33e39dc4c1d1" />
+
+- Press Ctrl + C in your terminal to cancel the hanging Terraform process so you can manually release the resource locks in AWS. Navigate to the AWS EC2 Console, locate any lingering Load Balancers or Elastic Network Interfaces tied to the EKS cluster, and delete them. Then, detach and delete the Internet Gateway from the VPC console. LB, IGW and VPC were deleted in that order, elastic Ips and subnets deletes were followed.
+
+- **Sync the Terraform state**, Run `terraform destroy -lock=false` again. Terraform will scan AWS, notice the infrastructure is already gone, and cleanly update its state file.
