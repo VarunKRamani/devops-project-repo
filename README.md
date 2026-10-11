@@ -24,5 +24,9 @@ _____
 - Automate application updates from code commit to production deployment.
 - Demonstrate a production-inspired DevOps workflow using industry-standard tools and practices.
 
+## Architecture
+
+![alt text](Archi_img.png)
+
 #-----------------------------------------------
 
