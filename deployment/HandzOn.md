@@ -94,8 +94,7 @@ ____
 
 - Export the cluster name, run `export cluster_name=my-eks-cluster`
 
-- Fetch the OIDC Id, run `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | '/' -f 5)`
-
+- Fetch the OIDC Id, run `oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)`                  
 - Now run `echo $oidc_id`. O/p --> oids id.
 
 <img width="800" height="600" alt="Screenshot 2026-05-08 115731" src="https://github.com/user-attachments/assets/3ffc7e2d-97f5-48db-a48c-a52ca6e0a0c2" />
@@ -105,37 +104,75 @@ ____
 <img width="800" height="600" alt="Screenshot 2026-05-08 120634" src="https://github.com/user-attachments/assets/21525b4c-3596-4e6d-a97f-3b568da45bda" />
 
 - Download the `iam_policy.json`, run `curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/instal/iam_policy.json`.
+`curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json`
 
 <img width="800" height="600" alt="Screenshot 2026-05-08 121251" src="https://github.com/user-attachments/assets/25739a8d-14a5-43d6-bdbf-37c58553dcb7" />
 
 - Create the policy, run `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`.
+`aws iam create-policy \
+  --policy-name AWSLoadBalancerControllerIAMPolicy \
+  --policy-document file://iam_policy.json`
 
 <img width="800" height="600" alt="Screenshot 2026-05-08 121251" src="https://github.com/user-attachments/assets/da541f9a-6fc7-4432-94ba-67e8b4123bf6" />
 
-- Assign IAM role to the service account, run `eksctl create iamserviceaccount \
+- Assign IAM role to the service account, run
+`eksctl create iamserviceaccount \
 --cluster=<your-cluster-name> \
 --namespace=kube—system \
 --name=aws-load-balancer-controller \
 --role-name AmazonEKSLoadBalncerControllerRole \
 --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
---approve`. Provide the AWS ID and Cluster name.
+--approve`.
 
+`eksctl create iamserviceaccount \
+  --cluster=my-eks-cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::<YOUR_ACCOUNT_ID>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve`
+Provide the AWS ID and Cluster name.
+**if needed override the existing service account, run**
+`account_id=$(aws sts get-caller-identity --query "Account" --output text)`
+
+`eksctl create iamserviceaccount \
+  --cluster=my-eks-cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::${account_id}:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve \
+  --override-existing-serviceaccounts`
 _____
-- Install helm.
+- Install helm. **Helm v3**
 <img width="800" height="600" alt="Screenshot 2026-05-08 122829" src="https://github.com/user-attachments/assets/1a079cf7-7a0b-4042-83d5-0e96f8346ea4" />
 
 - Run `helm repo add eks https://aws.github.io/eks-charts`.
 
+if Helm V2 is installed, update it to v3
+
+`helm repo add eks https://aws.github.io/eks-charts
+helm repo update eks`
+or 
+`curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh`
+if needed remove the outdated helm v2 binaries `sudo rm -f /usr/local/bin/helm /usr/local/bin/tiller`. Then update to helm v3.
+
 <img width="800" height="600" alt="Screenshot 2026-05-08 123056" src="https://github.com/user-attachments/assets/2bccab9c-80fb-4b17-ae53-66d77ce9064c" />
 
-- To install ALB Controller, run `helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
--n kube-system \
---set clusterName=<your-cluster-name> \
---set serviceAccount.create=fa1se \
---set serviceAccount.name=aws-load-ba1ancer—contr011er \
---set region=<region> \
---set vpcId=<your-vpc-id>`.
-Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed!
+- To install ALB Controller, run
+
+`helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=my-eks-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller`
+Provide Cluster name, VPC id and Region. o/p --> AWS Load Balancer controller installed.
+For VPC ID, run `vpc_id=$(aws eks describe-cluster --name my-eks-cluster --query "cluster.resourcesVpcConfig.vpcId" --output text)
+echo $vpc_id`.
+
+note: `eksctl utils associate-iam-oidc-provider --cluster=my-eks-cluster --approve`. o/p --> Terminal output must state IAM OpenID Connect provider is associated with cluster "my-eks-cluster".
 
 <img width="800" height="600" alt="Screenshot 2026-05-08 125212" src="https://github.com/user-attachments/assets/ff18a302-b8bc-4b19-81ac-95818f8ab68e" />
 
@@ -152,7 +189,8 @@ ____
 
 - Run, `kubectl apply -f ingress.yaml`. o/p --> 'ingress.networking.k8s.io/frontend—proxy created'
 
-- Run, `kubectl get ing`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
+- Run, `kubectl get ing` or `kubectl get ing frontend-proxy`, o/p --> ingress details. Check AWS console if the LB is created and the status be 'Active'.
+ restart the deployment if needed `kubectl rollout restart deployment aws-load-balancer-controller -n kube-system`.
 
 <img width="800" height="600" alt="Screenshot 2026-05-08 130912" src="https://github.com/user-attachments/assets/cd85aa5c-14a7-4312-aedb-ced1f7b863ce" />
 
